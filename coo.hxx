@@ -1,6 +1,16 @@
+#include<pair>
+
+typedef vertex_t long long;
+typedef edge_t pair<vertex_t,vertex_t> ;
+typedef weight_t long long;
+
 class coo{
 
-public:        
+    vertex_t *v_array;
+    edge_t *e_array;
+    weight_t *w_array;
+
+public:
     /*
     */
     int get_number_of_vertices() const {
