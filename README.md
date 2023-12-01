@@ -3,15 +3,17 @@
 ## 1. 有权，同质，有向图
 
 ## 2. Project report link
-[report link](https://www.overleaf.com/9676136123kqwtztppdhyv#4525cc)
+[report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
 ## 3. To do
 
 ### Todo
 
-- [ ] Work on the website ~3d #feat @john 2020-03-20  
-- [ ] Fix the homepage ~1d #bug @jane  
-  - [ ] Sub-task or description  
+- [ ] finish header file  
+- [ ] fill the gap 
+
+- [ ] finish final report
+    - [ ]
 
 
 
