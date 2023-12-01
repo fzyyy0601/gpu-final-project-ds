@@ -9,7 +9,7 @@
 
 ### Todo
 
-- [ ] finish header file  
+- [x] finish header file  
 - [ ] fill the gap 
 
 - [ ] finish final report
@@ -19,3 +19,9 @@
 
 ## 4. DDL
 12.13 to submit report, coed and readme.md
+
+## 5. task split
+ - 1 张世东
+ - 2 叶百家
+ - 3 冯子玥
+ - 4 苏昶月
