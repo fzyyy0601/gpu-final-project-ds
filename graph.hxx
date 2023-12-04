@@ -63,7 +63,7 @@ public:
 
     }
 
-    vertex_t deete_vertex(vertex_t){
+    vertex_t delete_vertex(vertex_t){
         
     }
 
