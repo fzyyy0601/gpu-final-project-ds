@@ -1,7 +1,7 @@
 #include<pair>
 
 typedef vertex_t long long;
-typedef edge_t pair<vertex_t,vertex_t> ;
+typedef edge_t pair<vertex_t,vertex_t>;
 typedef weight_t long long;
 typedef size_t long long;
 
@@ -20,13 +20,18 @@ public:
     /*
     1
     */
-    void init(int vn,int en,int wn){
+    __host__ __device__
+    void init(sizt_t **adj_matrix, size_t MAX){
 
     }
+    // void init(sizt_t **edge_list, size_t MAX){
+        
+
+    // }
     /*
     2
     */
-    __global__ // __host__ __device__
+    __host__ __device__
     int get_number_of_vertices() const {
 
         return 0;
@@ -34,12 +39,14 @@ public:
     /*
     3
     */
+    __host__ __device__
     int get_number_of_edges(){
 
     }
     /*
     4
     */
+    __host__ __device__
     int get_number_of_neighbors(vertex_type x){
 
     }
@@ -100,7 +107,7 @@ public:
     /*
     2
     */
-    vertex_t insert_vertex(edge_t){
+    vertex_t insert_vertex(edge_t ){
 
     }
     /*
