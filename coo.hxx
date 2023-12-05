@@ -26,6 +26,7 @@ public:
     /*
     2
     */
+    __global__ // __host__ __device__
     int get_number_of_vertices() const {
 
         return 0;
