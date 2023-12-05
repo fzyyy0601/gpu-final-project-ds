@@ -7,7 +7,7 @@ typedef size_t long long;
 
 class coo{
     
-    // vertex_t *v_array;
+    vertex_t *v_array;
     // edge_t *e_array;
     // weight_t *w_array;
     size_t *rowIdx;
