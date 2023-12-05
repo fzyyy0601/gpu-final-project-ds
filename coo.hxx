@@ -3,12 +3,18 @@
 typedef vertex_t long long;
 typedef edge_t pair<vertex_t,vertex_t> ;
 typedef weight_t long long;
+typedef size_t long long;
 
 class coo{
-
-    vertex_t *v_array;
-    edge_t *e_array;
-    weight_t *w_array;
+    
+    // vertex_t *v_array;
+    // edge_t *e_array;
+    // weight_t *w_array;
+    size_t *rowIdx;
+    size_t *colIdx;
+    weight_t *value;
+    size_t size;
+    size_t MAX;
 
 public:
     /*
