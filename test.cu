@@ -15,6 +15,6 @@ int main(){
     graph<int,coo> g;
     std::cout<<g.get_number_of_vertices();
     // g.get_number_of_vertices<<<1,1>>>();
-
+    int a;
     return 0;
 }
