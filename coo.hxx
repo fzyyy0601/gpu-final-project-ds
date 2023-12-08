@@ -45,25 +45,18 @@ public:
         size_t x = get_number_of_vertices_d<<<1, 1>>>(v_num_d);
         return x;
     }
-<<<<<<< HEAD
 
     __device__
     size_t get_number_of_vertices_d (size_t v_num_d)  {
         size_t x = v_num_d;
         return v_num_d;
     }
-=======
->>>>>>> 2944830e58723cb7b81abf501cbd6cdadf1ffaf3
     /*
     3
     */
     __host__ __device__
     int get_number_of_edges(){
-<<<<<<< HEAD
-
-=======
         return e_size_t;
->>>>>>> 2944830e58723cb7b81abf501cbd6cdadf1ffaf3
     }
 //     /*
 //     4
