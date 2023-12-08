@@ -8,9 +8,8 @@ template<typename weight_t> class coo{
     size_t v_size_d;
     size_t e_size_d;
     size_t MAX_d;
-    size_t v_size_h;
-    size_t e_size_h;
-
+    size_t *deleted_d;
+    
 public:
     /*s
     1
