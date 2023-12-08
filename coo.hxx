@@ -96,18 +96,29 @@ public:
     /* 2 get the weight of a vertix */
     __host__
     weight_t get_weight(size_t row, size_t col){
-        weight_t res;
-        size_t *edge;
-        cudaMalloc((void**) &edge, 2 * sizeof(size_t));
-        return res;
+        weight_t res_h;
+        weight_t res_d;
+        size_t *edge_h[2];
+        edge_h[0] = row;
+        edge_h[1] = col;
+        size_t *edge_d;
+        cudaMalloc((void**) &edge_d, 2 * sizeof(size_t));
+        
+        cudaMemcpy(edge_d, edge_h, 2 * sizeof(size_t), cudaMemcpyHostToDevice);
+        get_weight_d<<<number_of_blocks, threads_per_block>>>(edge_d, &res_d);
+        cudaMemcpy(&res_h, &res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
+        
+        return res_h;
     }
     
     __device__
-    void get_weight_d(size_t row, size_t col){
+    void get_weight_d(size_t *edge, weight_t res){
         int index = threadIdx.x + blockIdx.x * blockDim.x;
         int strid = blockDim.x * gridDim.x;
-
-
+        for (int i = index; i < e_num_d; i += strid){
+            if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
+                res = value_d[i];
+        }
     }
 
 
@@ -122,7 +133,7 @@ public:
     // 4
     // */
     int get_out_degree(vertex_t){
-         size_t num;
+        size_t num;
         // kernel: for each atomic add, *row_idx_d;       
     }
     // /*
