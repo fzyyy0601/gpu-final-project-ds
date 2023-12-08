@@ -109,8 +109,10 @@ public:
     // 3
     // */
     int get_in_degree(vertex_t){
-        size_t num;
-        // kernel: for each atomic add, *col_idx_d;
+        size_t * num;
+        // memory allocation
+        cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMemcpy(num, 0, sizeof(size_t), cudaMemcpyHostToDevice);
     }
     // /*
     // 4
