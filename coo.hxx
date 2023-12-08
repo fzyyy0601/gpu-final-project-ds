@@ -41,13 +41,13 @@ public:
     size_t get_number_of_vertices() const {
         return v_size_t;
     }
-//     /*
-//     3
-//     */
-//     __host__ __device__
-//     int get_number_of_edges(){
-
-//     }
+    /*
+    3
+    */
+    __host__ __device__
+    int get_number_of_edges(){
+        return e_size_t;
+    }
 //     /*
 //     4
 //     */
