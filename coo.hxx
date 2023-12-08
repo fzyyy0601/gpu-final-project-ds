@@ -37,26 +37,20 @@ public:
     __device__
     void init_d(){}
 
-    /*
-    2
-    */
-    __host__ __device__
+    /* 2 return the number of vertices, and this function is called on host */
+    __host__
     size_t get_number_of_vertices() {
-        size_t x = get_number_of_vertices_d<<<1, 1>>>(v_num_d);
-        return x;
+        size_t res;
+        cudaMemcpy(&res, v_num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
     }
 
-    __device__
-    size_t get_number_of_vertices_d (size_t v_num_d)  {
-        size_t x = v_num_d;
-        return v_num_d;
-    }
-    /*
-    3
-    */
-    __host__ __device__
+    /* 3 return the number of edges, and this function is called on host */
+    __host__
     int get_number_of_edges(){
-        return e_size_t;
+        size_t res;
+        cudaMemcpy(&res, e_num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
     }
 //     /*
 //     4
