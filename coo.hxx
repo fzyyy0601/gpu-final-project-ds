@@ -108,19 +108,52 @@ public:
     // /*
     // 3
     // */
-    int get_in_degree(vertex_t){
-        size_t * num;
+    int get_in_degree(vertex_t v){
+        size_t res = 0;
+        size_t *num;
+        vertex_t *vd;
+        
         // memory allocation
         cudaMalloc((void **)&num, sizeof(size_t));
-        cudaMemcpy(num, 0, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMalloc((void **)&vd, sizeof(vertex_t));
+        cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, v, sizeof(vertex_t), cudaMemcpyHostToDevice);
+        getDegree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d);
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) 
+            printf("Error: %s\n", cudaGetErrorString(err));
+        //bring data back 
+        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
     }
     // /*
     // 4
     // */
-    int get_out_degree(vertex_t){
-         size_t num;
-        // kernel: for each atomic add, *row_idx_d;       
+    int get_out_degree(vertex_t v){
+        size_t res = 0;
+        size_t *num;
+        vertex_t *vd;
+        
+        // memory allocation
+        cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMalloc((void **)&vd, sizeof(vertex_t));
+        cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, v, sizeof(vertex_t), cudaMemcpyHostToDevice);
+        getDegree<<<number_of_blocks, threads_per_block>>>(num, v, row_idx_d);
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) 
+            printf("Error: %s\n", cudaGetErrorString(err));
+        //bring data back 
+        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
     }
+    __global__ void getDegree(size_t *num, vertex_t v, size_t *idx_d) {
+        int index = (blockIdx.x * blockDim.x) + threadIdx.x;
+        if (index < n && idx_d[index] == x) {
+            atomicAdd(num, 1);
+        }
+    }
+
     // /*
     // 1
     // */
