@@ -86,17 +86,7 @@ public:
     // 2
     // */
     // edge_t get_weight(edge_t){
-    // 4
-    // */
-    // edge_t get_edge(edge_t){
-
-    // }
-    // /*
-    // 1
-    // */
-    // vertex_t get_vertex(vertex_t){
-
-    // }
+    
     /* 2 get the weight of a vertix */
     __host__
     weight_t get_weight(size_t row, size_t col){
