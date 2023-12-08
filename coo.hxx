@@ -1,15 +1,27 @@
 #include <utility>
 
 template<typename weight_t> class coo{
-    size_t *v_list_d;
+    /* whether nodes i exits, v_list_d[i] == 1 means node i is in the graph*/
+    bool *v_list_d;
+    /* source of each edge */
     size_t *row_idx_d;
+    /* target of each edge */
     size_t *col_idx_d;
+    /* wegith of each edge*/
     weight_t *value_d;
-    size_t v_size_d;
-    size_t e_size_d;
+    /* number of vertices */
+    size_t v_num_d;
+    /* number of edges */
+    size_t e_num_d;
+    /* max number of nodes */
     size_t MAX_d;
+    /* deleted slots in the row_idx_d */
     size_t *deleted_d;
-    
+    /* head of the deleted_d */
+    size_t head;
+    /* tail of the deleted_d */
+    size_t tail;
+
 public:
     /*s
     1
