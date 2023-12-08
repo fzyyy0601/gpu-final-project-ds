@@ -55,10 +55,13 @@ public:
 //     /*
 //     4
 //     */
-//     __host__ __device__
-//     int get_number_of_neighbors(vertex_type x){
+    __host__ __device__
+    int get_num_neighbors(vertex_type x){
+        size_t in_num = get_in_degree(x);
+        size_t out_num = get_out_degree(x);
+        return in_num + out_num;
+    }
 
-//     }
     // /*
     // 1
     // */
@@ -98,15 +101,17 @@ public:
     // /*
     // 3
     // */
-    // int get_in_degree(vertex_t){
-
-    // }
+    int get_in_degree(vertex_t){
+        size_t num;
+        // kernel: for each atomic add, *col_idx_d;
+    }
     // /*
     // 4
     // */
-    // int get_out_degree(vertex_t){
-
-    // }
+    int get_out_degree(vertex_t){
+         size_t num;
+        // kernel: for each atomic add, *row_idx_d;       
+    }
     // /*
     // 1
     // */
