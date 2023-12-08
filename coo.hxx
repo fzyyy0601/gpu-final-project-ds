@@ -75,9 +75,10 @@ public:
     // vertex_t get_source_vertex(){
 
     // }
-    // /*
-    // 3 deleted
-    // */
+
+    /*
+    3
+    */
     // vertex_t get_destination_vertex(){
 
     // }
