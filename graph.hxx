@@ -14,6 +14,11 @@ public:
         return graph_t.get_number_of_vertices();
     }
 
+    __host__ __device__
+    int get_num_neighbors(vertex_type x){
+        return graph_t.get_num_neighbors(x);
+    }
+
 //     __host__ __device__
 //     edge_t get_number_of_edges(){
 //         return graph_t.get_number_of_edges();
@@ -38,14 +43,15 @@ public:
 //     edge_t get_weight(edge_t){
 
 //     }
+    __host__ __device__
+    int get_in_degree(vertex_t v){
+        return graph_t.get_in_degree(v);
+    }
 
-//     int get_in_degree(vertex_t){
-
-//     }
-
-//     int get_out_degree(vertex_t){
-
-//     }
+    __host__ __device__
+    int get_out_degree(vertex_t v){
+        return graph_t.get_out_degree(v);
+    }
 
 //     edge_t insert_edge(edge_t){
 
