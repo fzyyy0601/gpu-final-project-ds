@@ -135,7 +135,10 @@ public:
     // /*
     // 4
     // */
-    // vertex_t delete_vertex(vertex_t){
+    vertex_t delete_vertex(vertex_t *v_del){
+        for(auto v : v_del) {
+            v_list_d[v] = 0;
+        }
         
-    // }
+    }
 };
