@@ -22,7 +22,8 @@ template<typename weight_t> class coo{
     size_t head;
     /* tail of the deleted_d */
     size_t tail;
-
+    int number_of_blocks;
+    int threads_per_block;
 public:
     /*s
     1
@@ -47,7 +48,7 @@ public:
 
     /* 3 return the number of edges, and this function is called on host */
     __host__
-    int get_number_of_edges(){
+    size_t get_number_of_edges(){
         size_t res;
         cudaMemcpy(&res, e_num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
@@ -69,13 +70,13 @@ public:
 
     // }
     // /*
-    // 2
+    // 2 deleted
     // */
     // vertex_t get_source_vertex(){
 
     // }
     // /*
-    // 3
+    // 3 deleted
     // */
     // vertex_t get_destination_vertex(){
 
@@ -84,8 +85,35 @@ public:
     // 2
     // */
     // edge_t get_weight(edge_t){
+    // 4
+    // */
+    // edge_t get_edge(edge_t){
 
     // }
+    // /*
+    // 1
+    // */
+    // vertex_t get_vertex(vertex_t){
+
+    // }
+    /* 2 get the weight of a vertix */
+    __host__
+    weight_t get_weight(size_t row, size_t col){
+        weight_t res;
+        size_t *edge;
+        cudaMalloc((void**) &edge, 2 * sizeof(size_t));
+        return res;
+    }
+    
+    __device__
+    void get_weight_d(size_t row, size_t col){
+        int index = threadIdx.x + blockIdx.x * blockDim.x;
+        int strid = blockDim.x * gridDim.x;
+
+
+    }
+
+
     // /*
     // 3
     // */
