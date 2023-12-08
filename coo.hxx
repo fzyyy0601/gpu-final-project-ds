@@ -1,8 +1,8 @@
 #include <utility>
 
 template<typename weight_t> class coo{
-    /* whether nodes i exits, v_list_d[i] == 1 means node i is in the graph*/
-    bool *v_list_d;
+    /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
+    bool *v_d;
     /* source of each edge */
     size_t *row_idx_d;
     /* target of each edge */
@@ -38,16 +38,23 @@ public:
     2
     */
     __host__ __device__
-    size_t get_number_of_vertices() const {
-        return v_size_t;
+    size_t get_number_of_vertices() {
+        size_t x = get_number_of_vertices_d<<<1, 1>>>(v_num_d);
+        return x;
     }
-//     /*
-//     3
-//     */
-//     __host__ __device__
-//     int get_number_of_edges(){
 
-//     }
+    __device__
+    size_t get_number_of_vertices_d (size_t v_num_d)  {
+        size_t x = v_num_d;
+        return v_num_d;
+    }
+    /*
+    3
+    */
+    __host__ __device__
+    int get_number_of_edges(){
+
+    }
 //     /*
 //     4
 //     */
