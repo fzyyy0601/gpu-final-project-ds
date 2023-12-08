@@ -4,6 +4,11 @@ template<typename> typename graph_view_t> class graph {
 public:
     graph_view_t<weight_t> graph_t;
 
+    __host__
+    void init(size_t* v_list ,size_t v_num_t ,size_t* row_idx_t ,size_t* col_idx_t ,size_t* value_t ,size_t e_num_t ,size_t MAX){
+        return graph_t.init(v_list,v_num_t,row_idx_t,col_idx_t,value_t,e_num_t,MAX);
+    }
+
     __host__ __device__
     size_t get_number_of_vertices() const {
         return graph_t.get_number_of_vertices();
