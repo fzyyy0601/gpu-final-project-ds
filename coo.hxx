@@ -81,18 +81,6 @@ public:
 
     // }
     // /*
-    // 4
-    // */
-    // edge_t get_edge(edge_t){
-
-    // }
-    // /*
-    // 1
-    // */
-    // vertex_t get_vertex(vertex_t){
-
-    // }
-    // /*
     // 2
     // */
     // edge_t get_weight(edge_t){
