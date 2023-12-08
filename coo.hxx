@@ -136,8 +136,11 @@ public:
     // */
     vertex_t delete_vertex(vertex_t *v_del){
         for(auto v : v_del) {
-            v_list_d[v] = 0;
+            v_d[v] = 0;
         }
-        
+        // kernel 1 : v_d from 1 to 0
+        // kernel 2 : *row_idx_d and *col_idx_d; find the vertex to delete 
+        //            from value to -1
+
     }
 };
