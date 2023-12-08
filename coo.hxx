@@ -1,4 +1,5 @@
 #include <utility>
+#include <vector>
 
 template<typename weight_t> class coo{
     /* whether nodes i exits, v_list_d[i] == 1 means node i is in the graph*/
@@ -27,8 +28,10 @@ public:
     1
     */
     __host__ 
-    void init(size_t *v_list, std::tuple<size_t,size_t,weight_t> *e_list, size_t MAX){
-
+    void init(size_t* v_list_t ,size_t v_num_t ,size_t* row_idx_t ,size_t* col_idx_t ,size_t* value_t ,size_t e_num_t ,size_t MAX){
+        cudaMalloc();
+        cudaMalloc();
+        cudaMalloc();
     }
 
     __device__
