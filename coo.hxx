@@ -72,16 +72,59 @@ public:
     // /*
     // 2 deleted
     // */
-    // vertex_t get_source_vertex(){
-
-    // }
-
+    std::vector<vertex_t> get_source_vertex(size_t x){
+        int num = get_in_degree(x);
+        //int count = 0;
+        int* d_count;
+        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
+        vertex_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
+        //cudaMalloc(&d_count, sizeof(int));
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        getSourceVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_d);
+        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
+        std::vector<vertex_t> ret(num);
+        for(int i = 0; i < num; i++){
+            ret[i] = list[i];
+        }
+        return ret;
+    }
+    __global__ void getSourceVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+        int index = threadIdx.x + blockIdx.x * blockDim.x;
+        if(index < MAX_d && col_idx_d[index] == x){
+            int idx = atomicAdd(count, 1);
+            list[idx] = index;
+        }
+    }
     /*
     3
     */
-    // vertex_t get_destination_vertex(){
-
-    // }
+    std::vector<vertex_t> get_destination_vertex(size_t x){
+        int num = get_out_degree(x);
+        //int count = 0;
+        int* d_count;
+        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
+        vertex_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
+        //cudaMalloc(&d_count, sizeof(int));
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        getDestinationVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_d);
+        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
+        std::vector<vertex_t> ret(num);
+        for(int i = 0; i < num; i++){
+            ret[i] = list[i];
+        }
+        return ret;
+    }
+    __global__ void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+        int index = threadIdx.x + blockIdx.x * blockDim.x;
+        if(index < MAX_d && col_idx_d[index] == x){
+            int idx = atomicAdd(count, 1);
+            list[idx] = index;
+        }
+    }
     // /*
     // 2
     // */
