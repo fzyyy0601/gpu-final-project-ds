@@ -56,10 +56,13 @@ public:
 //     /*
 //     4
 //     */
-//     __host__ __device__
-//     int get_number_of_neighbors(vertex_type x){
+    __host__ __device__
+    int get_num_neighbors(vertex_type x){
+        size_t in_num = get_in_degree(x);
+        size_t out_num = get_out_degree(x);
+        return in_num + out_num;
+    }
 
-//     }
     // /*
     // 1
     // */
@@ -111,15 +114,17 @@ public:
     // /*
     // 3
     // */
-    // int get_in_degree(vertex_t){
-
-    // }
+    int get_in_degree(vertex_t){
+        size_t num;
+        // kernel: for each atomic add, *col_idx_d;
+    }
     // /*
     // 4
     // */
-    // int get_out_degree(vertex_t){
-
-    // }
+    int get_out_degree(vertex_t){
+         size_t num;
+        // kernel: for each atomic add, *row_idx_d;       
+    }
     // /*
     // 1
     // */
@@ -143,8 +148,11 @@ public:
     // */
     vertex_t delete_vertex(vertex_t *v_del){
         for(auto v : v_del) {
-            v_list_d[v] = 0;
+            v_d[v] = 0;
         }
-        
+        // kernel 1 : v_d from 1 to 0
+        // kernel 2 : *row_idx_d and *col_idx_d; find the vertex to delete 
+        //            from value to -1
+
     }
 };
