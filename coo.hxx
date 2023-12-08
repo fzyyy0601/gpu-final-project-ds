@@ -1,6 +1,37 @@
 #include <utility>
 #include <vector>
 
+__device__
+void init_d(){}
+
+__global__ 
+void getSourceVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    int index = threadIdx.x + blockIdx.x * blockDim.x;
+    if(index < MAX_d && col_idx_d[index] == x){
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+    }
+}
+
+__global__ 
+void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    int index = threadIdx.x + blockIdx.x * blockDim.x;
+    if(index < MAX_d && col_idx_d[index] == x){
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+    }
+}
+
+__global__
+void get_weight_d(size_t *edge, weight_t res){
+    int index = threadIdx.x + blockIdx.x * blockDim.x;
+    int strid = blockDim.x * gridDim.x;
+    for (int i = index; i < e_num_d; i += strid){
+        if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
+            res = value_d[i];
+    }
+}
+
 template<typename weight_t> class coo{
     /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
     bool *v_d;
@@ -35,8 +66,7 @@ public:
         cudaMalloc();
     }
 
-    __device__
-    void init_d(){}
+
 
     /* 2 return the number of vertices, and this function is called on host */
     __host__
@@ -90,13 +120,7 @@ public:
         }
         return ret;
     }
-    __global__ void getSourceVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-        int index = threadIdx.x + blockIdx.x * blockDim.x;
-        if(index < MAX_d && col_idx_d[index] == x){
-            int idx = atomicAdd(count, 1);
-            list[idx] = index;
-        }
-    }
+
     /*
     3
     */
@@ -118,13 +142,7 @@ public:
         }
         return ret;
     }
-    __global__ void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-        int index = threadIdx.x + blockIdx.x * blockDim.x;
-        if(index < MAX_d && col_idx_d[index] == x){
-            int idx = atomicAdd(count, 1);
-            list[idx] = index;
-        }
-    }
+
     // /*
     // 2
     // */
@@ -148,15 +166,7 @@ public:
         return res_h;
     }
     
-    __device__
-    void get_weight_d(size_t *edge, weight_t res){
-        int index = threadIdx.x + blockIdx.x * blockDim.x;
-        int strid = blockDim.x * gridDim.x;
-        for (int i = index; i < e_num_d; i += strid){
-            if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
-                res = value_d[i];
-        }
-    }
+
 
 
     // /*
