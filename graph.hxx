@@ -16,6 +16,11 @@ public:
         graph_t.print();
     }
 
+    /* 1 modify grid size and block size*/
+    void modify_config(size_t number_of_blocks,size_t threads_per_block){
+        graph_t.modify_config(number_of_blocks,threads_per_block);
+    }
+
     /* 2 return the vertex number in graph */
     size_t get_number_of_vertices(){
         return graph_t.get_number_of_vertices();

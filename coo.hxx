@@ -151,6 +151,12 @@ public:
         cudaFree(deleted_d);
     }
 
+    /* 1 modify grid size and block size*/
+    void modify_config(size_t number_of_blocks,size_t threads_per_block){
+        this->number_of_blocks=number_of_blocks;
+        this->threads_per_block=threads_per_block;
+    }
+
     /* 2 return the number of vertices, and this function is called on host */
     size_t get_number_of_vertices() {
         return v_num_h;

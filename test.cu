@@ -72,6 +72,12 @@ int main(){
 
     /* test print*/
     g.print();
-    
+
+    /* test modify configuration */
+    printf("\n test modify config \n");
+    g.modify_config(8,8);
+
+    /* test print*/
+    g.print();
     return 0;
 }
