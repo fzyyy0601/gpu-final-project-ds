@@ -22,13 +22,16 @@ void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* coun
     }
 }
 
+template <typename weight_t>
 __global__
-void get_weight_d(size_t *edge, weight_t res){
+void get_weight_d(size_t row, size_t col, weight_t *res){
     int index = threadIdx.x + blockIdx.x * blockDim.x;
     int strid = blockDim.x * gridDim.x;
     for (int i = index; i < e_num_d; i += strid){
-        if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
-            res = value_d[i];
+        // if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
+        if (row_idx_d[i] == row && col_idx_d[i] == size)
+            // *res = value_d[i];
+            cudaMemcpy(res, value_d + i, sizeof(weight_t), cudaMemcpyDeviceToDevice);
     }
 }
 
@@ -153,15 +156,15 @@ public:
     weight_t get_weight(size_t row, size_t col){
         weight_t res_h;
         weight_t res_d;
-        size_t *edge_h[2];
-        edge_h[0] = row;
-        edge_h[1] = col;
-        size_t *edge_d;
-        cudaMalloc((void**) &edge_d, 2 * sizeof(size_t));
-        
-        cudaMemcpy(edge_d, edge_h, 2 * sizeof(size_t), cudaMemcpyHostToDevice);
-        get_weight_d<<<number_of_blocks, threads_per_block>>>(edge_d, &res_d);
-        cudaMemcpy(&res_h, &res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
+        // size_t *edge_h[2];
+        // edge_h[0] = row;
+        // edge_h[1] = col;
+        // size_t *edge_d;
+        // cudaMalloc((void**) &edge_d, 2 * sizeof(size_t));
+        cudaMalloc((void*) &res_d, sizeof(weight_t));
+        // cudaMemcpy(edge_d, edge_h, 2 * sizeof(size_t), cudaMemcpyHostToDevice);
+        get_weight_d<<<number_of_blocks, threads_per_block>>><weight_t>(row, col, &res_d);
+        cudaMemcpy(&res_h, res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
         
         return res_h;
     }
