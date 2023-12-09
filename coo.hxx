@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <cuda.h>
 
-template <typename weight_t>
 __global__
 void coo_init_v_d(bool *v_d,size_t *v_list_d,size_t n){
     int index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -14,35 +13,38 @@ void coo_init_v_d(bool *v_d,size_t *v_list_d,size_t n){
     }
 }
 
-__global__ 
-void getSourceVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
-        int idx = atomicAdd(count, 1);
-        list[idx] = index;
-    }
-}
-
-__global__ 
-void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
-        int idx = atomicAdd(count, 1);
-        list[idx] = index;
+__global__
+void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_t e_num, bool *res){
+    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    for (int i = index; i < e_num; i += stride){
+        if (row_idx[i] == row && col_idx[i] == col)
+            *res = 1;
     }
 }
 
 template <typename weight_t>
 __global__
-void get_weight_d(size_t row, size_t col, weight_t *res){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    int strid = blockDim.x * gridDim.x;
-    for (int i = index; i < e_num_d; i += strid){
-        // if (row_idx_d[i] == edge[0] && col_idx_d[i] == edge[1])
-        if (row_idx_d[i] == row && col_idx_d[i] == size)
-            // *res = value_d[i];
-            cudaMemcpy(res, value_d + i, sizeof(weight_t), cudaMemcpyDeviceToDevice);
+void coo_insert_edge_d(size_t* row_idx_d,
+                    size_t* col_idx_d,
+                    weight_t* value_d,
+                    size_t e_num_d,
+                    size_t n_row_d,
+                    size_t n_col_d,
+                    weight_t n_value_d,
+                    size_t* deleted_d,
+                    size_t head_d,
+                    size_t tail_d){
+    int idx;
+    if(head_d==tail_d){
+        idx=e_num_d;
     }
+    else{
+        idx=deleted_d[head_d];
+    }
+    row_idx_d[idx]=n_row_d;
+    col_idx_d[idx]=n_col_d;
+    value_d[idx]=n_value_d;
 }
 
 template<typename weight_t> class coo{
@@ -73,7 +75,7 @@ template<typename weight_t> class coo{
 
 public:
     /*
-    1
+    1 Initialize the graph
     */
     void init(size_t* v_list_h ,size_t v_num_h ,size_t* row_idx_h ,size_t* col_idx_h ,weight_t* value_h ,size_t e_num_h ,size_t number_of_blocks ,size_t threads_per_block ,size_t MAX_h){
         this->number_of_blocks=number_of_blocks;
@@ -103,10 +105,11 @@ public:
         cudaMemcpy(value_d,value_h,e_num_h*sizeof(weight_t),cudaMemcpyHostToDevice);
 
         cudaMalloc((void **)&deleted_d,MAX_h*sizeof(size_t));
-
-        print();
     }
 
+    /*
+    1 print the graph
+    */
     void print(){
         bool v_h[MAX_h];
         size_t row_idx_h[MAX_h];
@@ -118,27 +121,30 @@ public:
         cudaMemcpy(col_idx_h,col_idx_d,MAX_h*sizeof(size_t),cudaMemcpyDeviceToHost);
         cudaMemcpy(value_h,value_d,MAX_h*sizeof(weight_t),cudaMemcpyDeviceToHost);
         cudaMemcpy(deleted_h,deleted_d,MAX_h*sizeof(size_t),cudaMemcpyDeviceToHost);
-        printf("v_d: ");
-        for(int i=0;i<MAX_h;i++){
+        printf("---------------graph begin--------------\n");
+        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu ,gridsize=%lu, blocksize=%lu\n",v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
+        printf("v_d:  ");
+        for(int i=0;i<v_num_h;i++){
             if(v_h[i]) printf("1 ");
             else printf("0 ");
         }
         printf("\nrow_idx_d: ");
-        for(int i=0;i<MAX_h;i++){
+        for(int i=0;i<e_num_h;i++){
             printf("%lu ",row_idx_h[i]);
         }
         printf("\ncol_idx_d: ");
-        for(int i=0;i<MAX_h;i++){
+        for(int i=0;i<e_num_h;i++){
             printf("%lu ",col_idx_h[i]);
         }
         printf("\nvalue_d  : ");
-        for(int i=0;i<MAX_h;i++){
+        for(int i=0;i<e_num_h;i++){
             printf("%d ",value_h[i]);
         }
-        printf("\nrow_idx_d: ");
+        printf("\ndeleted_idx_d: ");
         for(int i=head_h;i<tail_h;i++){
             printf("%lu ",deleted_h[i%MAX_h]);
         }
+        printf("\n---------------graph end----------------\n");
     }
 
     ~coo(){
@@ -150,162 +156,51 @@ public:
     }
 
     /* 2 return the number of vertices, and this function is called on host */
-    __host__
     size_t get_number_of_vertices() {
-        size_t res;
-        cudaMemcpy(&res, v_num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
-        return res;
+        return v_num_h;
     }
 
-    /* 3 return the number of edges, and this function is called on host */
-    __host__
+    /* 2 return the number of edges, and this function is called on host */
     size_t get_number_of_edges(){
-        size_t res;
-        cudaMemcpy(&res, e_num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return e_num_h;
+    }
+
+    /* 2 if vertex is in the graph, return True. Otherwise, return False*/
+    bool check_vertex(size_t vertex){
+        bool res;
+        cudaMemcpy(&res, v_d + vertex, sizeof(bool), cudaMemcpyDeviceToHost);
         return res;
     }
-//     /*
-//     4
-//     */
-    __host__ __device__
-    int get_num_neighbors(vertex_type x){
-        size_t in_num = get_in_degree(x);
-        size_t out_num = get_out_degree(x);
-        return in_num + out_num;
-    }
 
-    // /*
-    // 1
-    // */
-    // void set(){
+    /* 2 if edge is in the graph, return True. Otherwise, return False*/
+    bool check_edge(size_t row, size_t col){
+        bool res_h = 0;
+        bool *res_d;
+        cudaMalloc((void**) &res_d, sizeof(bool));
+        cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
 
-    // }
-    // /*
-    // 2 deleted
-    // */
-    std::vector<vertex_t> get_source_vertex(size_t x){
-        int num = get_in_degree(x);
-        //int count = 0;
-        int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        getSourceVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
-        }
-        return ret;
+        find_edge_d<<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, e_num_h, res_d);
+        
+        cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
+        return res_h;
     }
 
     /*
-    3
+    1 Insert edge (row_h,col_h,value_h) into graph
     */
-    std::vector<vertex_t> get_destination_vertex(size_t x){
-        int num = get_out_degree(x);
-        //int count = 0;
-        int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        getDestinationVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
+    bool insert_edge(size_t row_h,
+                    size_t col_h,
+                    weight_t value_h){
+        if(check_edge(row_h,col_h)){
+            return false;
         }
-        return ret;
-    }
-
-    // /*
-    // 2
-    // */
-    // edge_t get_weight(edge_t){
-    
-    /* 2 get the weight of a vertix */
-    __host__
-    weight_t get_weight(size_t row, size_t col){
-        weight_t res_h;
-        weight_t res_d;
-        // size_t *edge_h[2];
-        // edge_h[0] = row;
-        // edge_h[1] = col;
-        // size_t *edge_d;
-        // cudaMalloc((void**) &edge_d, 2 * sizeof(size_t));
-        cudaMalloc((void*) &res_d, sizeof(weight_t));
-        // cudaMemcpy(edge_d, edge_h, 2 * sizeof(size_t), cudaMemcpyHostToDevice);
-        get_weight_d<<<number_of_blocks, threads_per_block>>><weight_t>(row, col, &res_d);
-        cudaMemcpy(&res_h, res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
-        
-        return res_h;
-    }
-    
-
-
-
-    // /*
-    // 3
-    // */
-    int get_in_degree(vertex_t v){
-        size_t res = 0;
-        size_t *num;
-        vertex_t *vd;
-        
-        // memory allocation
-        cudaMalloc((void **)&num, sizeof(size_t));
-        cudaMalloc((void **)&vd, sizeof(vertex_t));
-        cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
-        cudaMemcpy(vd, v, sizeof(vertex_t), cudaMemcpyHostToDevice);
-        getDegree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d);
-        cudaError_t err = cudaGetLastError();
-        if (err != cudaSuccess) 
-            printf("Error: %s\n", cudaGetErrorString(err));
-        //bring data back 
-        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
-        return res;
-    }
-    // /*
-    // 4
-    // */
-    int get_out_degree(vertex_t){
-         size_t num;
-        // kernel: for each atomic add, *row_idx_d;       
-    }
-    // /*
-    // 1
-    // */
-    // edge_t insert_edge(edge_t){
-
-    // }
-    // /*
-    // 2
-    // */
-    // vertex_t insert_vertex(edge_t ){
-
-    // }
-    // /*
-    // 3
-    // */
-    // edge_t delete_edge(edge_t){
-
-    // }
-    // /*
-    // 4
-    // */
-    vertex_t delete_vertex(vertex_t *v_del){
-        for(auto v : v_del) {
-            v_d[v] = 0;
+        coo_insert_edge_d<weight_t><<<1,1>>>(row_idx_d,col_idx_d,value_d,e_num_h,row_h,col_h,value_h,deleted_d,head_h,tail_h);
+        if(head_h==tail_h){
+            e_num_h++;
         }
-        // kernel 1 : v_d from 1 to 0
-        // kernel 2 : *row_idx_d and *col_idx_d; find the vertex to delete 
-        //            from value to -1
-
+        else{
+            head_h++;
+        }
+        return true;
     }
 };
