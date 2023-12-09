@@ -181,7 +181,7 @@ public:
 
     // }
     // /*
-    // 2 deleted
+    // 2 
     // */
     std::vector<vertex_t> get_source_vertex(size_t x){
         int num = get_in_degree(x);
