@@ -8,9 +8,7 @@ __global__
 void coo_init_v_d(bool *v_d,size_t *v_list_d,size_t n){
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     int wd=gridDim.x*blockDim.x;
-    printf("index - %d\n",index);
     while(index<n){
-        printf("index\n");
         v_d[v_list_d[index]]=1;
         index+=wd;
     }
