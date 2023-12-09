@@ -176,6 +176,9 @@ public:
 
     /* 2 if edge is in the graph, return True. Otherwise, return False*/
     bool check_edge(size_t row, size_t col){
+        if (!(check_vertex(row) && check_vertex(col))){
+            return false;
+        }
         bool res_h = 0;
         bool *res_d;
         cudaMalloc((void**) &res_d, sizeof(bool));
