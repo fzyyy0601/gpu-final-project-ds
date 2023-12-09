@@ -178,6 +178,7 @@ public:
         find_edge_d<<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, e_num_h, res_d);
         
         cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
+        cudaFree(&res_d);
         return res_h;
     }
 
