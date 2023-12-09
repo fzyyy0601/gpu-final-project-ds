@@ -45,6 +45,11 @@ void get_weight_d(size_t row, size_t col, weight_t *res){
     }
 }
 
+// __global__
+// void find_vertex(size_t vertex, bool *res){
+//     *res = true;
+// }
+
 template<typename weight_t> class coo{
     /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
     bool *v_d;
@@ -157,6 +162,16 @@ public:
         return res;
     }
 
+    /* if vertex is in the graph, return True. Otherwise, return False*/
+    // bool find_vertex(size_t vertex){
+    //     return v_d[vertex];
+    // }
+
+    // bool find_edge(size_t row, size_t col){
+
+
+    // }
+
     /* 3 return the number of edges, and this function is called on host */
     __host__
     size_t get_number_of_edges(){
@@ -175,11 +190,15 @@ public:
     }
 
     // /*
-    // 1
+    // 1 modify blocksize and gridsize
     // */
     // void set(){
 
+
     // }
+
+
+
     // /*
     // 2 
     // */
