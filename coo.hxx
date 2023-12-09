@@ -120,7 +120,7 @@ public:
         printf("---------------graph begin--------------\n");
         printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu ,gridsize=%lu, blocksize=%lu\n",v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
         printf("v_d:  ");
-        for(int i=0;i<v_num_h;i++){
+        for(int i=0;i<MAX_h;i++){
             if(v_h[i]) printf("1 ");
             else printf("0 ");
         }
