@@ -26,7 +26,7 @@ void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_
 __global__ void getDegree(int *num, size_t v, size_t *idx_d, size_t n) {
     int index = (blockIdx.x * blockDim.x) + threadIdx.x;
     if (index < n && idx_d[index] == v) {
-        atomicAdd(*num, 1);
+        atomicAdd((int*)*num, 1);
     }
 }
 
