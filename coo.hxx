@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <cuda.h>
 
+/* Kernel function for initialization*/
 __global__
 void coo_init_v_d(bool *v_d,size_t *v_list_d,size_t n){
     int index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -13,6 +14,7 @@ void coo_init_v_d(bool *v_d,size_t *v_list_d,size_t n){
     }
 }
 
+/* kernel function for checking whether an edge is in the graph*/
 __global__
 void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_t e_num, bool *res){
     size_t index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -23,6 +25,7 @@ void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_
     }
 }
 
+/* kernel function for getting weight*/
 template <typename weight_t>
 __global__
 void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weight_t *value, size_t e_num, weight_t *res){
@@ -34,6 +37,7 @@ void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weig
     }
 }
 
+/* kernel function for getting indegree or outdegree */
 __global__ void get_degree(size_t *num, size_t v, size_t *idx_d, size_t n) {
     size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
@@ -43,13 +47,14 @@ __global__ void get_degree(size_t *num, size_t v, size_t *idx_d, size_t n) {
     }
 }
 
+/* kernel function for inserting vertex */
 __global__
 void insert_vertex_d(size_t vertex, bool *v){
     v[vertex] = 1;
 }
 
 
-/* get list of source or destination vertex, depends on how you  */
+/* kernel function for getting source or destination vertex, depends on how you inputting the start or end*/
 __global__ 
 void get_end_of_vertex_d(size_t* res, size_t x, size_t *start, size_t *end, int* count, size_t e_num){
     size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
@@ -63,7 +68,7 @@ void get_end_of_vertex_d(size_t* res, size_t x, size_t *start, size_t *end, int*
     }
 }
 
-
+/* our class to store the graph with coo */
 template <typename weight_t>
 __global__
 void coo_insert_edge_d(size_t* row_idx_d,
