@@ -297,7 +297,7 @@ public:
     /* 2 if edge is in the graph, return the value. Otherwise, return not_found*/
     weight_t get_weight(size_t row, size_t col, weight_t not_found){
         if (!(check_vertex(row) && check_vertex(col))){
-                return not_found;
+            return not_found;
         }
 
         weight_t res_h = not_found;
