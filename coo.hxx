@@ -28,7 +28,7 @@ __global__ void getDegree(size_t *num, size_t v, size_t *idx_d, size_t n) {
     size_t stride = gridDim.x * blockDim.x;
     while (index < n && idx_d[index] == v) {
         atomicAdd((int *)num, 1);
-        index 
+        index += stride;
     }
 }
 
@@ -303,78 +303,4 @@ public:
         cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
     }
-
-<<<<<<< Updated upstream
-    /* return list of vertex */
-    std::vector<vertex_t> get_destination_vertex(size_t x){
-        int num = get_out_degree(x);
-        //int count = 0;
-        int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        getDestinationVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
-        }
-        cudaFree(&cudaList);
-        free(&list);
-        return ret;
-    }
-    std::vector<vertex_t> get_source_vertex(size_t x){
-        int num = get_in_degree(x);
-        //int count = 0;
-        int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        getSourceVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
-        }
-        cudaFree(&cudaList);
-        free(&list);
-        return ret;
-    }
-
-    /* 3 Delete edge (row_h,col_h,value_h) */
-    bool delete_edge(size_t row_h,
-                    size_t col_h){
-        bool res_h = 0;
-        bool *res_d;
-        cudaMalloc((void**) &res_d, sizeof(bool));
-        cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
-
-        coo_delete_edge_d<<<number_of_blocks,threads_per_block>>>(row_idx_d,col_idx_d,e_num_h,row_h,col_h);
-
-        cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
-        cudaFree(&res_d);
-        if(res_h){
-            tail_h=tail_h+1;
-            if(tail_h==MAX_h){
-                tail_h=0;
-            }
-        }
-        return res_h;
-    }
-=======
-    // size_t delete_vertex(size_t *v_del){
-    //     for(auto v : v_del) {
-    //         v_del[v] = 0;
-    //     }
-    //     // kernel 1 : v_d from 1 to 0
-    //     // kernel 2 : *row_idx_d and *col_idx_d; find the vertex to delete 
-    //     //            from value to -1
-    // }
->>>>>>> Stashed changes
 };
