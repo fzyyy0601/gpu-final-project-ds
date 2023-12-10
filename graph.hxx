@@ -79,11 +79,11 @@ public:
         return graph_t.delete_edge(row_h,col_h);
     }
 
-    vector<size_t> get_destination_vertex(size_t x){
+    std::vector<size_t> get_destination_vertex(size_t x){
         return graph_t.get_destination_vertex(x);
     }
     // __host__ __device__ 
-    vector<size_t> get_source_vertex(size_t x){
+    std::vector<size_t> get_source_vertex(size_t x){
         return graph_t.get_source_vertex(x);
     }
 };
