@@ -46,6 +46,21 @@ public:
         return graph_t.get_weight(row, col, not_found);
     }
 
+    /* 4 Get neighbors */
+    size_t get_num_neighbors(size_t x){
+        return graph_t.get_num_neighbors(x);
+    }
+
+    /* 4 Get in degree */
+    size_t get_in_degree(size_t v){
+        return graph_t.get_in_degree(v);
+    }
+
+    /* 4 Get out degree */
+    size_t get_out_degree(size_t v){
+        return graph_t.get_out_degree(v);
+    }
+
     /* 2 insert vertex */
     bool insert_vertex(size_t vertex){
         return graph_t.insert_vertex(vertex);

@@ -34,6 +34,15 @@ void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weig
     }
 }
 
+__global__ void get_degree(size_t *num, size_t v, size_t *idx_d, size_t n) {
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < n && idx_d[index] == v) {
+        atomicAdd((int *)num, 1);
+        index += stride;
+    }
+}
+
 __global__
 void insert_vertex_d(size_t vertex, bool *v){
     v[vertex] = 1;
@@ -251,6 +260,51 @@ public:
         cudaMemcpy(&res_h, res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
         cudaFree(&res_d);
         return res_h;
+    }
+
+    /* 4 Get neighbors */
+    size_t get_num_neighbors(size_t x){
+        return get_in_degree(x)+get_out_degree(x);
+    }
+
+    /* 4 Get in degree */
+    size_t get_in_degree(size_t v){
+        size_t res = 0;
+        size_t *num;
+        size_t *vd;
+        
+        // memory allocation
+        cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMalloc((void **)&vd, sizeof(size_t));
+        cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
+        get_degree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d, MAX_h);
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) 
+            printf("Error: %s\n", cudaGetErrorString(err));
+        //bring data back 
+        cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
+    }
+
+    /* 4 Get out degree */
+    size_t get_out_degree(size_t v){
+        size_t res = 0;
+        size_t *num;
+        size_t *vd;
+        
+        // memory allocation
+        cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMalloc((void **)&vd, sizeof(size_t));
+        cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
+        get_degree<<<number_of_blocks, threads_per_block>>>(num, v, row_idx_d, MAX_h);
+        cudaError_t err = cudaGetLastError();
+        if (err != cudaSuccess) 
+            printf("Error: %s\n", cudaGetErrorString(err));
+        //bring data back 
+        cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        return res;
     }
 
     /* 2 insert_vertex */
