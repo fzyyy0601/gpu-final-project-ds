@@ -386,19 +386,19 @@ public:
     }
 
     /* return list of vertex */
-    std::vector<vertex_t> get_destination_vertex(size_t x){
+    std::vector<size_t> get_destination_vertex(size_t x){
         int num = get_out_degree(x);
         //int count = 0;
         int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
+        size_t* list = (size_t*)malloc(num* sizeof(size_t));
+        size_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(size_t)* num);
         //cudaMalloc(&d_count, sizeof(int));
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
         getDestinationVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
+        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
+        std::vector<size_t> ret(num);
         for(int i = 0; i < num; i++){
             ret[i] = list[i];
         }
@@ -406,19 +406,19 @@ public:
         free(&list);
         return ret;
     }
-    std::vector<vertex_t> get_source_vertex(size_t x){
+    std::vector<size_t> get_source_vertex(size_t x){
         int num = get_in_degree(x);
         //int count = 0;
         int* d_count;
-        vertex_t* list = (vertex_t*)malloc(num* sizeof(vertex_t));
-        vertex_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(vertex_t)* num);
+        size_t* list = (size_t*)malloc(num* sizeof(size_t));
+        size_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(size_t)* num);
         //cudaMalloc(&d_count, sizeof(int));
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
         getSourceVertex<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_d);
-        cudaMemcpy(list, cudaList, sizeof(vertex_t)* num, cudaMemcpyDeviceToHost);
+        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<vertex_t> ret(num);
+        std::vector<size_t> ret(num);
         for(int i = 0; i < num; i++){
             ret[i] = list[i];
         }
