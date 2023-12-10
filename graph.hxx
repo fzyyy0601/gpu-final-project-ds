@@ -54,7 +54,7 @@ public:
     }
 
     __host__ __device__
-    size_t get_num_neighbors(vertex_type x){
+    size_t get_num_neighbors(vertex_t x){
         return graph_t.get_num_neighbors(x);
     }
 
