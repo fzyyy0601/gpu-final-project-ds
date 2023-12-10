@@ -1,5 +1,5 @@
-#include<stdio.h>
-
+#include <stdio.h>
+#include <vector>
 template<typename weight_t,
 template<typename> typename graph_view_t> class graph {
 
