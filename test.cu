@@ -126,13 +126,13 @@ int main(){
 
     printf("----------------------------Test 3 end-------------------------------------\n");
     
-    printf("----------------------------Test 4 begin-------------------------------------\n");
+    printf("----------------------------Test 5 begin-------------------------------------\n");
     printf("\nget source of 1:\n");
     std::vector<size_t> source = g.get_source_vertex(1);
     if(source.empty()) printf("No source vertex for 1.\n");
     else{
         for(size_t each: source){
-            printf("\t%lu", each);
+            printf("%lu\t", each);
         }
     }
     
@@ -141,11 +141,11 @@ int main(){
     if(destination.empty()) printf("No destination vertex for 1.\n");
     else{
         for(size_t each: destination){
-            printf("\t%lu", each);
+            printf("%lu\t", each);
         }
     }
     
-    printf("----------------------------Test 4 end-------------------------------------\n");
+    printf("----------------------------Test 5 end-------------------------------------\n");
      
 
     return 0;
