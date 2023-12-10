@@ -32,24 +32,6 @@ __global__ void getDegree(size_t *num, size_t v, size_t *idx_d, size_t n) {
     }
 }
 
-/* get list of destination vertex */
-__global__ void getDestinationVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
-        int idx = atomicAdd(count, 1);
-        list[idx] = index;
-    }
-}
-
-/* get list of source vertex */
-__global__ void getSourceVertex(vertex_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
-        int idx = atomicAdd(count, 1);
-        list[idx] = index;
-    }
-}
-
 template <typename weight_t>
 __global__
 void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weight_t *value, size_t e_num, weight_t *res){
