@@ -63,6 +63,29 @@ void coo_insert_edge_d(size_t* row_idx_d,
     value_d[idx]=n_value_d;
 }
 
+__global__
+void coo_delete_edge_d(size_t* row_idx_d,
+                    size_t* col_idx_d,
+                    size_t e_num_d,
+                    size_t n_row_d,
+                    size_t n_col_d,
+                    size_t* deleted_d,
+                    size_t tail_d,
+                    bool *res){
+    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while(index<e_num_d){
+        if (row_idx_d[index]==n_row_d&&col_idx_d[index]==n_col_d){
+            deleted_d[tail_d]=index;
+            row_idx_d[index]=-1;
+            *res=1;
+            return;
+        }
+        if(*res) return;
+        index+=stride;
+    }
+}
+
 template<typename weight_t> class coo{
     /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
     bool *v_d;
@@ -180,7 +203,12 @@ public:
 
     /* 2 return the number of edges, and this function is called on host */
     size_t get_number_of_edges(){
-        return e_num_h;
+        if(head_h<=tail_h){
+            return e_num_h-(tail_h-head_h);
+        }
+        else{
+            return e_num_h-(tail_h-head_h+MAX_h);
+        }
     }
 
     /* 2 if vertex is in the graph, return True. Otherwise, return False*/
@@ -210,7 +238,7 @@ public:
     /* 2 if edge is in the graph, return the value. Otherwise, return not_found*/
     weight_t get_weight(size_t row, size_t col, weight_t not_found){
         if (!(check_vertex(row) && check_vertex(col))){
-            return not_found;
+                return not_found;
         }
 
         weight_t res_h = not_found;
@@ -241,6 +269,9 @@ public:
     bool insert_edge(size_t row_h,
                     size_t col_h,
                     weight_t value_h){
+        if(!(check_vertex(row_h) && check_vertex(col_h))){
+            return false;
+        }
         if(check_edge(row_h,col_h)){
             return false;
         }
@@ -250,7 +281,34 @@ public:
         }
         else{
             head_h++;
+            if(head_h==MAX_h){
+                head_h=0;
+            }
         }
         return true;
+    }
+
+    /* 3 Delete edge (row_h,col_h,value_h) */
+    bool delete_edge(size_t row_h,
+                    size_t col_h){
+        if (!(check_vertex(row_h) && check_vertex(col_h))){
+            return false;
+        }
+        bool res_h = 0;
+        bool *res_d;
+        cudaMalloc((void**) &res_d, sizeof(bool));
+        cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
+
+        coo_delete_edge_d<<<number_of_blocks,threads_per_block>>>(row_idx_d,col_idx_d,e_num_h,row_h,col_h,deleted_d,tail_h,res_d);
+
+        cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
+        cudaFree(&res_d);
+        if(res_h){
+            tail_h=tail_h+1;
+            if(tail_h==MAX_h){
+                tail_h=0;
+            }
+        }
+        return res_h;
     }
 };

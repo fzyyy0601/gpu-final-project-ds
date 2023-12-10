@@ -51,10 +51,16 @@ public:
         return graph_t.insert_vertex(vertex);
     }
 
+
     /* 1 if edge is in the graph, return False. Otherwise, return True then inseert*/
     bool insert_edge(size_t row_h,
                     size_t col_h,
                     weight_t value_h){
         return graph_t.insert_edge(row_h,col_h,value_h);
+    }
+
+    /* 3 Delete edge (row_h,col_h,value_h) */
+    bool delete_edge(size_t row_h,size_t col_h){
+        return graph_t.delete_edge(row_h,col_h);
     }
 };

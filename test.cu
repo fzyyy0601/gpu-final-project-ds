@@ -40,12 +40,52 @@ int main(){
     }
     printf("\n");
 
+    printf("----------------------------Test 1 begin------------------------------------\n");
+
     /* test initialization */
     printf("Start initialize!\n");
     g.init(v_list_h,v_num_h,row_idx_h,col_idx_h,value_h,e_num_h,number_of_blocks,threads_per_block,MAX_h);
 
     /* test print*/
     g.print();
+
+    /* test insert edge */
+    printf("\ntest insert edge\n");
+    size_t row_h=1,col_h=2;
+    printf("Insert success? %d\n",(int)g.insert_edge(row_h,col_h,3));
+
+    /* test print*/
+    g.print();
+
+    printf("Is (7, 8) in the graph? %d \n", (int)g.check_edge(7, 8));
+
+    row_h=6,col_h=8;
+    printf("Insert sueccess? %d\n",(int)g.insert_edge(row_h,col_h,10));
+
+    /* test print*/
+    g.print();
+
+    /* test modify configuration */
+    printf("\ntest modify config \n");
+    g.modify_config(8,8);
+
+    /* test insert edge */
+    printf("\ntest delete edge\n");
+
+    row_h=7,col_h=8;
+    printf("Delete sueccess? %d\n",(int)g.delete_edge(row_h,col_h));
+
+    /* test print*/
+    g.print();
+
+    row_h=6,col_h=8;
+    printf("Delete sueccess? %d\n",(int)g.delete_edge(row_h,col_h));
+
+    /* test print*/
+    g.print();
+
+    printf("----------------------------Test 1 end--------------------------------------\n");
+
     printf("----------------------------Test 2 begin------------------------------------\n");
     /* 2 test get number of vertices and edges */
     printf("\ntest get number of vertices and edges\n");
@@ -69,26 +109,11 @@ int main(){
     printf("insert 0? %d\n", (int)g.insert_vertex(0));
     printf("insert 1? %d\n", (int)g.insert_vertex(1));
     printf("----------------------------Test 2 end-------------------------------------\n");
+
+    printf("----------------------------Test 3 begin------------------------------------\n");
+
+    printf("----------------------------Test 3 end-------------------------------------\n");
     
-    /* test insert edge */
-    printf("\ntest insert edge\n");
-    size_t row_h=1,col_h=2;
-    printf("Insert success? %d\n",(int)g.insert_edge(row_h,col_h,3));
 
-    /* test print*/
-    g.print();
-
-    row_h=7,col_h=8;
-    printf("Insert sueccess? %d\n",(int)g.insert_edge(row_h,col_h,10));
-
-    /* test print*/
-    g.print();
-
-    /* test modify configuration */
-    printf("\n test modify config \n");
-    g.modify_config(8,8);
-
-    /* test print*/
-    g.print();
     return 0;
 }
