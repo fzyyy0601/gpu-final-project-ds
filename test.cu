@@ -137,23 +137,37 @@ int main(){
 
     printf("----------------------------Test 4 end-------------------------------------\n");
     printf("----------------------------Test 5 begin------------------------------------\n");
-    printf("\ntest get source vertex\n");
-
-    std::vector<size_t> source = g.get_source_vertex(1);
-    if(source.empty()) printf("No source vertex for 1.\n");
-    else{
-        for(int i=0; i < source.size(); i++) printf("%lu\t",source[i]);
-	}
-    }
+    printf("\ntest get source or destination of vertex\n");
 
     printf("\nget destination of 1:\n");
     std::vector<size_t> destination = g.get_destination_vertex(1);
-    if(destination.empty()) printf("No destination vertex for 1.\n");
+    if(destination.empty()) 
+        printf("No destination vertex for 1.\n");
     else{
-        for(size_t each: destination){
-            printf("%lu\t", each);
-        }
+        printf("destination of vertex 1: ");
+        for(int i=0; i < destination.size(); i++) 
+            printf("%lu\t",destination[i]);
+        printf("\n");
     }
+
+    std::vector<size_t> source = g.get_source_vertex(1);
+    if(source.empty()) 
+        printf("No source vertex for 1.\n");
+    else{
+        for(int i=0; i < source.size(); i++) 
+            printf("%lu\t",source[i]);
+	}
+
+    std::vector<size_t> source1 = g.get_source_vertex(6);
+    if(source1.empty()) 
+        printf("No source vertex for 6.\n");
+    else{
+        printf("sources of vertex 6: ");
+        for(int i=0; i < source1.size(); i++) 
+            printf("%lu\t",source1[i]);
+        printf("\n");
+	}
+    
 
     /* test print*/
     g.print();
