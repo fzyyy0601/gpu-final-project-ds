@@ -128,12 +128,12 @@ int main(){
     
     printf("----------------------------Test 3 begin-------------------------------------\n");
     printf("\nget source of 1:\n");
-    vector<size_t> source = g.get_source_vertex(1);
+    std::vector<size_t> source = g.get_source_vertex(1);
     for(auto each: source){
         printf("\t%lu", each);
     }
     printf("\nget destination of 1:\n");
-    vector<size_t> destination = g.get_destination_vertex(1);
+    std::vector<size_t> destination = g.get_destination_vertex(1);
     fot(auto each: destination){
         printf("\t%lu", each);
     }
