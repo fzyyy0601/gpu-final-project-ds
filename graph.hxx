@@ -68,11 +68,11 @@ public:
         return graph_t.get_out_degree(v);
     }
     // __host__ __device__ 
-    std::vector<size_t> get_destination_vertex(size_t x){
+    vector<size_t> get_destination_vertex(size_t x){
         return graph_t.get_destination_vertex(x);
     }
     // __host__ __device__ 
-    std::vector<size_t> get_source_vertex(size_t x){
+    vector<size_t> get_source_vertex(size_t x){
         return graph_t.get_source_vertex(x);
     }
 };
