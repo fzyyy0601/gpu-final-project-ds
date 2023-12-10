@@ -1,6 +1,7 @@
 #include "graph.hxx"
 #include "coo.hxx"
 #include<iostream>
+#include<vector>
 
 /*
 insert nodes: 1 5 7 9 10
@@ -124,7 +125,17 @@ int main(){
     printf("number of neighbors for vertex 6: %lu, \n", g.get_num_neighbors(6));
 
     printf("----------------------------Test 3 end-------------------------------------\n");
-    
 
+    printf("----------------------------Test 4 begin------------------------------------\n");
+    printf("\ntest delete vertex\n");
+
+    size_t v_del = 3;
+    printf("Delete sueccess? %d\n",(int)g.delete_vertex(v_del));
+
+    /* test print*/
+    g.print();
+
+    printf("----------------------------Test 4 end-------------------------------------\n");
+    
     return 0;
 }

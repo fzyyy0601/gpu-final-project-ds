@@ -50,19 +50,25 @@ void insert_vertex_d(size_t vertex, bool *v){
 
 /* get list of destination vertex */
 __global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < MAX_d && col_idx_d[index] == x) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
     }
 }
 
 /* get list of source vertex */
 __global__ void get_source_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < MAX_d && col_idx_d[index] == x) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
     }
 }
 
@@ -103,9 +109,10 @@ void coo_delete_edge_d(size_t* row_idx_d,
     size_t index = blockIdx.x * blockDim.x + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
     while(index<e_num_d){
-        if (row_idx_d[index]==n_row_d&&col_idx_d[index]==n_col_d){
-            deleted_d[tail_d]=index;
-            row_idx_d[index]=-1;
+        if (row_idx_d[index] == n_row_d && col_idx_d[index] == n_col_d){
+            deleted_d[tail_d] = index;
+            row_idx_d[index] = -1;
+            col_idx_d[index]=-1;
             *res=1;
             return;
         }
@@ -114,9 +121,35 @@ void coo_delete_edge_d(size_t* row_idx_d,
     }
 }
 
+__global__
+void coo_delete_vertex_d(size_t* row_idx_d,
+                    size_t* col_idx_d,
+                    size_t e_num_d,
+                    size_t v_del,
+                    size_t* deleted_d,
+                    bool *v_d,
+                    size_t tail_d,
+                    bool *res,
+                    size_t *num,
+                    size_t MAX_d){
+    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    if(index == 0) v_d[v_del] = 0;
+    while(index < e_num_d){
+        if (row_idx_d[index] == v_del || col_idx_d[index] == v_del){
+            row_idx_d[index] = -1;
+            col_idx_d[index] = -1;
+            *res = 1;
+            int idx = atomicAdd((int *)num, 1);
+            deleted_d[(tail_d + idx) % MAX_d] = index;
+        }
+        index += stride;
+    }
+}
+
 template<typename weight_t> class coo{
     /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
-    bool *v_d;
+    bool *v_d; 
     /* source of each edge */
     size_t *row_idx_d;
     /* target of each edge */
@@ -298,6 +331,7 @@ public:
         cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
         get_degree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d, e_num_h);
+        get_degree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d, e_num_h);
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) 
             printf("Error: %s\n", cudaGetErrorString(err));
@@ -385,46 +419,33 @@ public:
         return res_h;
     }
 
-    /* return list of vertex */
-    std::vector<size_t> get_destination_vertex(size_t x){
-        int num = get_out_degree(x);
-        //int count = 0;
-        int* d_count;
-        size_t* list = (size_t*)malloc(num* sizeof(size_t));
-        size_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(size_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        get_destination_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_h);
-        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<size_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
+    /* 4 Delete edge (row_h,col_h,value_h) */
+    bool delete_vertex(size_t x){
+        if (!(check_vertex(x))){
+            return false;
         }
-        cudaFree(&cudaList);
-        free(&list);
-        return ret;
-    }
-    std::vector<size_t> get_source_vertex(size_t x){
-        int num = get_in_degree(x);
-        //int count = 0;
-        int* d_count;
-        size_t* list = (size_t*)malloc(num* sizeof(size_t));
-        size_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(size_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        get_source_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_h);
-        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
-        std::vector<size_t> ret(num);
-        for(int i = 0; i < num; i++){
-            ret[i] = list[i];
-        }
-        cudaFree(&cudaList);
-        free(&list);
-        return ret;
-    }
+        bool res_h = 0;
+        bool *res_d;
+        size_t num_h = 0;
+        size_t *num_d;
+        cudaMalloc((void**) &res_d, sizeof(bool));
+        cudaMalloc((void**) &num_d, sizeof(size_t));
+        cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
+        cudaMemcpy(num_d, &num_h, sizeof(size_t), cudaMemcpyHostToDevice);
 
+        coo_delete_vertex_d<<<number_of_blocks,threads_per_block>>>(row_idx_d, col_idx_d, e_num_h, x, deleted_d, v_d, tail_h, res_d, num_d, MAX_h);
+
+        cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
+        cudaMemcpy(&num_h, num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
+        cudaFree(&res_d);
+        cudaFree(&num_d);
+        while(num_h > 0){
+            tail_h = tail_h+1;
+            if(tail_h == MAX_h){
+                tail_h = 0;
+            }
+            num_h -= 1;
+        }
+        return res_h;
+    }
 };
