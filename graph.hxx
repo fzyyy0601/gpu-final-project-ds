@@ -54,23 +54,25 @@ public:
     }
 
     __host__ __device__
-    size_t get_num_neighbors(vertex_t x){
+    size_t get_num_neighbors(size_t x){
         return graph_t.get_num_neighbors(x);
     }
 
     __host__ __device__
-    size_t get_in_degree(vertex_t v){
+    size_t get_in_degree(size_t v){
         return graph_t.get_in_degree(v);
     }
 
     __host__ __device__
-    size_t get_out_degree(vertex_t v){
+    size_t get_out_degree(size_t v){
         return graph_t.get_out_degree(v);
     }
-    __host__ __device__ std::vector<vertex_t> get_destination_vertex(size_t x){
+    // __host__ __device__ 
+    std::vector<size_t> get_destination_vertex(size_t x){
         return graph_t.get_destination_vertex(x);
     }
-    __host__ __device__ std::vector<vertex_t> get_source_vertex(size_t x){
+    // __host__ __device__ 
+    std::vector<size_t> get_source_vertex(size_t x){
         return graph_t.get_source_vertex(x);
     }
 };
