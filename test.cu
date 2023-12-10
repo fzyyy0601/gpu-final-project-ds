@@ -139,8 +139,21 @@ int main(){
     printf("----------------------------Test 5 begin------------------------------------\n");
     printf("\ntest get source vertex\n");
 
-    size_t v_del = 1;
-    std::vector<size_t> source;
+    std::vector<size_t> source = g.get_source_vertex(1);
+    if(source.empty()) printf("No source vertex for 1.\n");
+    else{
+        for(int i=0; i < source.size(); i++) printf("%lu\t",source[i]);
+	}
+    }
+
+    printf("\nget destination of 1:\n");
+    std::vector<size_t> destination = g.get_destination_vertex(1);
+    if(destination.empty()) printf("No destination vertex for 1.\n");
+    else{
+        for(size_t each: destination){
+            printf("%lu\t", each);
+        }
+    }
 
     /* test print*/
     g.print();
