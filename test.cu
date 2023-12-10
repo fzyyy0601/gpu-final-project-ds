@@ -64,6 +64,21 @@ int main(){
     printf("the value of (1, 2) is %d \n", g.get_weight(1, 2, -1));
     printf("the value of (1, 5) is %d \n", g.get_weight(1, 5, -1));
     printf("----------------------------Test 2 end-------------------------------------\n");
+
+    printf("----------------------------Test 3 begin------------------------------------\n");
+    /* 3 test get number of in degrees */
+    printf("\ntest get in degrees\n");
+    printf("number of in-degrees for vertex 3: %lu, ", g.get_in_degree(3));
+
+    /* 3 test get number of out degrees */
+    printf("\ntest get out degrees\n");
+    printf("number of out-degrees for vertex 1: %lu, ", g.get_out_degree(1));
+
+    /* 3 test get number of neighbors */
+    printf("\ntest get number of neighbors\n");
+    printf("number of neighbors for vertex 6: %lu, ", g.get_out_degree(6));
+
+    printf("----------------------------Test 3 end-------------------------------------\n");
     
     /* test insert edge */
     printf("\ntest insert edge\n");
