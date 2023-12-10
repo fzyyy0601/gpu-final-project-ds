@@ -136,6 +136,16 @@ int main(){
     g.print();
 
     printf("----------------------------Test 4 end-------------------------------------\n");
-    
+    printf("----------------------------Test 5 begin------------------------------------\n");
+    printf("\ntest get source vertex\n");
+
+    size_t v_del = 1;
+    std::vector<size_t> source;
+
+    /* test print*/
+    g.print();
+
+    printf("----------------------------Test 5 end-------------------------------------\n");
+
     return 0;
 }

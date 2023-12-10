@@ -83,4 +83,11 @@ public:
     bool delete_vertex(size_t v_del){
         return graph_t.delete_vertex(v_del);
     }
+    std::vector<size_t> get_destination_vertex(size_t x){
+        return graph_t.get_destination_vertex(x);
+    }
+    // __host__ __device__
+    std::vector<size_t> get_source_vertex(size_t x){
+        return graph_t.get_source_vertex(x);
+    }
 };
