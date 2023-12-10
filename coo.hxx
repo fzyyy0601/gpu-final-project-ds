@@ -388,13 +388,13 @@ public:
     /* return list of vertex */
     std::vector<size_t> get_destination_vertex(size_t x){
         int num = get_out_degree(x);
-        //int count = 0;
+        int count = 0;
         int* d_count;
         size_t* list = (size_t*)malloc(num* sizeof(size_t));
         size_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(size_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        cudaMalloc((void**) &cudaList, sizeof(size_t)* num);
+        cudaMalloc((void**) &d_count, sizeof(int));
+        cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
         get_destination_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_h);
         cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
@@ -402,19 +402,21 @@ public:
         for(int i = 0; i < num; i++){
             ret[i] = list[i];
         }
-        cudaFree(&cudaList);
+        cudaFree(cudaList);
+        cudaFree(d_count);
+        //free(count);
         free(&list);
         return ret;
     }
     std::vector<size_t> get_source_vertex(size_t x){
         int num = get_in_degree(x);
-        //int count = 0;
+        int count = 0;
         int* d_count;
         size_t* list = (size_t*)malloc(num* sizeof(size_t));
         size_t* cudaList;
-        cudaMalloc(&cudaList, sizeof(size_t)* num);
-        //cudaMalloc(&d_count, sizeof(int));
-        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        cudaMalloc((void**)&cudaList, sizeof(size_t)* num);
+        cudaMalloc((void**) &d_count, sizeof(int));
+        cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
         get_source_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_h);
         cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
@@ -422,7 +424,8 @@ public:
         for(int i = 0; i < num; i++){
             ret[i] = list[i];
         }
-        cudaFree(&cudaList);
+        cudaFree(cudaList);
+        cudaFree(d_count);
         free(&list);
         return ret;
     }
