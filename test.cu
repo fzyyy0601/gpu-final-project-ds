@@ -129,16 +129,22 @@ int main(){
     printf("----------------------------Test 4 begin-------------------------------------\n");
     printf("\nget source of 1:\n");
     std::vector<size_t> source = g.get_source_vertex(1);
-    printf(source.size);
-    // for(size_t each: source){
-    //     printf("\t%lu", each);
-    // }
-    // for(auto t: source) cout<<t<<" ";
+    if(source.empty()) printf("No source vertex for 1.\n");
+    else{
+        for(size_t each: source){
+            printf("\t%lu", each);
+        }
+    }
+    
     printf("\nget destination of 1:\n");
     std::vector<size_t> destination = g.get_destination_vertex(1);
-    // for(size_t each: destination){
-    //     printf("\t%lu", each);
-    // }
+    if(destination.empty()) printf("No destination vertex for 1.\n");
+    else{
+        for(size_t each: destination){
+            printf("\t%lu", each);
+        }
+    }
+    
     printf("----------------------------Test 4 end-------------------------------------\n");
      
 
