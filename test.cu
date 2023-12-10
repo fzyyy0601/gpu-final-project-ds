@@ -76,7 +76,7 @@ int main(){
 
     /* 3 test get number of neighbors */
     printf("\ntest get number of neighbors\n");
-    printf("number of neighbors for vertex 6: %lu, \n", g.get_neighbors(6));
+    printf("number of neighbors for vertex 6: %lu, \n", g.get_num_neighbors(6));
 
     printf("----------------------------Test 3 end-------------------------------------\n");
     
