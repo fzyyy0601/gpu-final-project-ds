@@ -23,7 +23,7 @@ void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_
     }
 }
 
-__global__ void getDegree(size_t *num, size_t v, size_t *idx_d, size_t n) {
+__global__ void getDegree(int *num, size_t v, size_t *idx_d, size_t n) {
     int index = (blockIdx.x * blockDim.x) + threadIdx.x;
     if (index < n && idx_d[index] == v) {
         atomicAdd(*num, 1);
@@ -262,13 +262,15 @@ public:
         return true;
     }
 
-    size_t get_out_degree(size_t v){
-        size_t res = 0;
-        size_t *num;
+    int get_out_degree(size_t v){
+        int res = 0;
+        // size_t *num;
+        int *num;
         size_t vd;
         
         // memory allocation
-        cudaMalloc((void **)&num, sizeof(size_t));
+        // cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMalloc((void **)&num, sizeof(int));
         cudaMalloc((void **)&vd, sizeof(size_t));
         cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(vd, v, sizeof(size_t), cudaMemcpyHostToDevice);
@@ -277,17 +279,20 @@ public:
         if (err != cudaSuccess) 
             printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
-        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        // cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        cudaMemcpy(res, num, sizeof(int), cudaMemcpyDeviceToHost);
         return res;
     }
 
-    size_t get_in_degree(size_t v){
-        size_t res = 0;
-        size_t *num;
+    int get_in_degree(size_t v){
+        int res = 0;
+        // size_t *num;
+        int* num;
         size_t vd;
         
         // memory allocation
-        cudaMalloc((void **)&num, sizeof(size_t));
+        // cudaMalloc((void **)&num, sizeof(size_t));
+        cudaMalloc((void **)&num, sizeof(int));
         cudaMalloc((void **)&vd, sizeof(size_t));
         cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(vd, v, sizeof(size_t), cudaMemcpyHostToDevice);
@@ -296,7 +301,8 @@ public:
         if (err != cudaSuccess) 
             printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
-        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        // cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        cudaMemcpy(res, num, sizeof(int), cudaMemcpyDeviceToHost);
         return res;
     }
 
