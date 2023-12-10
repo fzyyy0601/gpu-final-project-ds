@@ -411,7 +411,7 @@ public:
         cudaFree(cudaList);
         cudaFree(d_count);
         //free(count);
-        free(&list);
+        // free(&list);
         return ret;
     }
     std::vector<size_t> get_source_vertex(size_t x){
@@ -432,7 +432,7 @@ public:
         }
         cudaFree(cudaList);
         cudaFree(d_count);
-        free(&list);
+        // free(&list);
         return ret;
     }
 
