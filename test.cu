@@ -103,6 +103,11 @@ int main(){
     printf("\ntest get_weight\n");
     printf("the value of (1, 2) is %d \n", g.get_weight(1, 2, -1));
     printf("the value of (1, 5) is %d \n", g.get_weight(1, 5, -1));
+
+    /* 2 insert vertex */
+    printf("\n test insert vertex\n");
+    printf("insert 0? %d\n", (int)g.insert_vertex(0));
+    printf("insert 1? %d\n", (int)g.insert_vertex(1));
     printf("----------------------------Test 2 end-------------------------------------\n");
 
     printf("----------------------------Test 3 begin------------------------------------\n");

@@ -248,6 +248,18 @@ public:
         return res_h;
     }
 
+    /* 2 insert_vertex */
+    bool insert_vertex(size_t vertex){
+        if (check_vertex(vertex)) {
+            return false;
+        }
+        v_num_h += 1;
+        insert_vertex_d<<<1, 1>>>(vertex, v_d);
+        cudaDeviceSynchronize();
+
+        return true;
+    }
+
     /* 1 Insert edge (row_h,col_h,value_h) into graph */
     bool insert_edge(size_t row_h,
                     size_t col_h,
