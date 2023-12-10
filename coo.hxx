@@ -34,6 +34,11 @@ void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weig
     }
 }
 
+__global__
+void insert_vertex_d(size_t vertex, bool *v){
+    v[vertex] = 1;
+}
+
 template <typename weight_t>
 __global__
 void coo_insert_edge_d(size_t* row_idx_d,
@@ -218,6 +223,18 @@ public:
         cudaMemcpy(&res_h, res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
         cudaFree(&res_d);
         return res_h;
+    }
+
+    /* 2 insert_vertex */
+    bool insert_vertex(size_t vertex){
+        if (check_vertex(vertex)) {
+            return false;
+        }
+        v_num_h += 1;
+        insert_vertex_d<<<1, 1>>>(vertex, v_d);
+        cudaDeviceSynchronize();
+
+        return true;
     }
 
     /* 1 Insert edge (row_h,col_h,value_h) into graph */

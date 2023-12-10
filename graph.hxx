@@ -46,6 +46,11 @@ public:
         return graph_t.get_weight(row, col, not_found);
     }
 
+    /* 2 insert vertex */
+    bool insert_vertex(size_t vertex){
+        return graph_t.insert_vertex(vertex);
+    }
+
     /* 1 if edge is in the graph, return False. Otherwise, return True then inseert*/
     bool insert_edge(size_t row_h,
                     size_t col_h,
