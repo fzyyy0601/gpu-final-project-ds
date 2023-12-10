@@ -32,6 +32,17 @@ __global__ void getDegree(size_t *num, size_t v, size_t *idx_d, size_t n) {
 
 template <typename weight_t>
 __global__
+void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weight_t *value, size_t e_num, weight_t *res){
+    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    for (int i = index; i < e_num; i += stride){
+        if (row_idx[i] == row && col_idx[i] == col)
+            *res = value[i];
+    }
+}
+
+template <typename weight_t>
+__global__
 void coo_insert_edge_d(size_t* row_idx_d,
                     size_t* col_idx_d,
                     weight_t* value_d,
@@ -158,6 +169,12 @@ public:
         cudaFree(deleted_d);
     }
 
+    /* 1 modify grid size and block size*/
+    void modify_config(size_t number_of_blocks,size_t threads_per_block){
+        this->number_of_blocks=number_of_blocks;
+        this->threads_per_block=threads_per_block;
+    }
+
     /* 2 return the number of vertices, and this function is called on host */
     size_t get_number_of_vertices() {
         return v_num_h;
@@ -177,6 +194,9 @@ public:
 
     /* 2 if edge is in the graph, return True. Otherwise, return False*/
     bool check_edge(size_t row, size_t col){
+        if (!(check_vertex(row) && check_vertex(col))){
+            return false;
+        }
         bool res_h = 0;
         bool *res_d;
         cudaMalloc((void**) &res_d, sizeof(bool));
@@ -185,6 +205,25 @@ public:
         find_edge_d<<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, e_num_h, res_d);
         
         cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
+        cudaFree(&res_d);
+        return res_h;
+    }
+
+    /* 2 if edge is in the graph, return the value. Otherwise, return not_found*/
+    weight_t get_weight(size_t row, size_t col, weight_t not_found){
+        if (!(check_vertex(row) && check_vertex(col))){
+            return not_found;
+        }
+
+        weight_t res_h = not_found;
+        weight_t *res_d;
+        cudaMalloc((void**) &res_d, sizeof(weight_t));
+        cudaMemcpy(res_d, &res_h, sizeof(weight_t), cudaMemcpyHostToDevice);
+
+        get_weight_d<weight_t><<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, value_d, e_num_h, res_d);
+
+        cudaMemcpy(&res_h, res_d, sizeof(weight_t), cudaMemcpyDeviceToHost);
+        cudaFree(&res_d);
         return res_h;
     }
 

@@ -16,6 +16,11 @@ public:
         graph_t.print();
     }
 
+    /* 1 modify grid size and block size*/
+    void modify_config(size_t number_of_blocks,size_t threads_per_block){
+        graph_t.modify_config(number_of_blocks,threads_per_block);
+    }
+
     /* 2 return the vertex number in graph */
     size_t get_number_of_vertices(){
         return graph_t.get_number_of_vertices();
@@ -34,6 +39,11 @@ public:
     /* 2 if edge is in the graph, return True. Otherwise, return False */
     bool check_edge(size_t row, size_t col){
         return graph_t.check_edge(row, col);
+    }
+
+    /* 2 if edge is in the graph, return value. Otherwise, return not_found */
+    weight_t get_weight(size_t row, size_t col, weight_t not_found){
+        return graph_t.get_weight(row, col, not_found);
     }
 
     /* 1 if edge is in the graph, return False. Otherwise, return True then inseert*/

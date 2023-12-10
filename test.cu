@@ -46,19 +46,25 @@ int main(){
 
     /* test print*/
     g.print();
-
-    /* test get number of vertices and edges */
+    printf("----------------------------Test 2 begin------------------------------------\n");
+    /* 2 test get number of vertices and edges */
     printf("\ntest get number of vertices and edges\n");
     printf("number of vertices: %lu, ", g.get_number_of_vertices());
     printf("number of edges: %lu\n", g.get_number_of_edges());
 
-    /* test find vertex and edge */
+    /* 2 test find vertex and edge */
     printf("\ntest find vertex and edge\n");
     printf("Is 1 in the graph? %d \n", (int)g.check_vertex(1));
     printf("Is 1 in the graph? %d \n", (int)g.check_vertex(0));
     printf("Is (1, 2) in the graph? %d \n", (int)g.check_edge(1, 2));
     printf("Is (1, 5) in the graph? %d \n", (int)g.check_edge(1, 5));
 
+    /* 2 test find vertex and edge */
+    printf("\ntest get_weight\n");
+    printf("the value of (1, 2) is %d \n", g.get_weight(1, 2, -1));
+    printf("the value of (1, 5) is %d \n", g.get_weight(1, 5, -1));
+    printf("----------------------------Test 2 end-------------------------------------\n");
+    
     /* test insert edge */
     printf("\ntest insert edge\n");
     size_t row_h=1,col_h=2;
@@ -72,6 +78,12 @@ int main(){
 
     /* test print*/
     g.print();
-    
+
+    /* test modify configuration */
+    printf("\n test modify config \n");
+    g.modify_config(8,8);
+
+    /* test print*/
+    g.print();
     return 0;
 }
