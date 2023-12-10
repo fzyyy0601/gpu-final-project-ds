@@ -1,6 +1,7 @@
 #include "graph.hxx"
 #include "coo.hxx"
 #include<iostream>
+#include<vector>
 
 /*
 insert nodes: 1 5 7 9 10

@@ -48,6 +48,31 @@ void insert_vertex_d(size_t vertex, bool *v){
     v[vertex] = 1;
 }
 
+/* get list of destination vertex */
+__global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < MAX_d && col_idx_d[index] == x) {
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
+    }
+}
+
+/* get list of source vertex */
+__global__ void get_source_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < MAX_d && col_idx_d[index] == x) {
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
+    }
+}
+
+
 template <typename weight_t>
 __global__
 void coo_insert_edge_d(size_t* row_idx_d,
@@ -84,9 +109,9 @@ void coo_delete_edge_d(size_t* row_idx_d,
     size_t index = blockIdx.x * blockDim.x + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
     while(index<e_num_d){
-        if (row_idx_d[index]==n_row_d&&col_idx_d[index]==n_col_d){
-            deleted_d[tail_d]=index;
-            row_idx_d[index]=-1;
+        if (row_idx_d[index] == n_row_d && col_idx_d[index] == n_col_d){
+            deleted_d[tail_d] = index;
+            row_idx_d[index] = -1;
             col_idx_d[index]=-1;
             *res=1;
             return;
@@ -166,7 +191,7 @@ public:
         cudaMemcpy(v_list_d,v_list_h,v_num_h*sizeof(size_t),cudaMemcpyHostToDevice);
         coo_init_v_d<<<number_of_blocks,threads_per_block>>>(v_d,v_list_d,v_num_h);
         cudaDeviceSynchronize();
-        cudaFree(v_list_d);
+                cudaFree(v_list_d);
 
         cudaMalloc((void **)&row_idx_d,MAX_h*sizeof(size_t));
         cudaMemcpy(row_idx_d,row_idx_h,e_num_h*sizeof(size_t),cudaMemcpyHostToDevice);
