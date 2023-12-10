@@ -24,9 +24,11 @@ void find_edge_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, size_
 }
 
 __global__ void getDegree(size_t *num, size_t v, size_t *idx_d, size_t n) {
-    int index = (blockIdx.x * blockDim.x) + threadIdx.x;
-    if (index < n && idx_d[index] == v) {
-        atomicAdd(*num, 1);
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < n && idx_d[index] == v) {
+        atomicAdd((int *)num, 1);
+        index 
     }
 }
 
@@ -267,41 +269,42 @@ public:
     size_t get_out_degree(size_t v){
         size_t res = 0;
         size_t *num;
-        size_t vd;
+        size_t *vd;
         
         // memory allocation
         cudaMalloc((void **)&num, sizeof(size_t));
         cudaMalloc((void **)&vd, sizeof(size_t));
-        cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
-        cudaMemcpy(vd, v, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
         getDegree<<<number_of_blocks, threads_per_block>>>(num, v, row_idx_d, MAX_h);
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) 
             printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
-        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
     }
 
     size_t get_in_degree(size_t v){
         size_t res = 0;
         size_t *num;
-        size_t vd;
+        size_t *vd;
         
         // memory allocation
         cudaMalloc((void **)&num, sizeof(size_t));
         cudaMalloc((void **)&vd, sizeof(size_t));
-        cudaMemcpy(num, res, sizeof(size_t), cudaMemcpyHostToDevice);
-        cudaMemcpy(vd, v, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
+        cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
         getDegree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d, MAX_h);
         cudaError_t err = cudaGetLastError();
         if (err != cudaSuccess) 
             printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
-        cudaMemcpy(res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
+        cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
     }
 
+<<<<<<< Updated upstream
     /* return list of vertex */
     std::vector<vertex_t> get_destination_vertex(size_t x){
         int num = get_out_degree(x);
@@ -364,4 +367,14 @@ public:
         }
         return res_h;
     }
+=======
+    // size_t delete_vertex(size_t *v_del){
+    //     for(auto v : v_del) {
+    //         v_del[v] = 0;
+    //     }
+    //     // kernel 1 : v_d from 1 to 0
+    //     // kernel 2 : *row_idx_d and *col_idx_d; find the vertex to delete 
+    //     //            from value to -1
+    // }
+>>>>>>> Stashed changes
 };

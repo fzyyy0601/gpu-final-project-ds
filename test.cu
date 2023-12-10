@@ -68,15 +68,15 @@ int main(){
     printf("----------------------------Test 3 begin------------------------------------\n");
     /* 3 test get number of in degrees */
     printf("\ntest get in degrees\n");
-    printf("number of in-degrees for vertex 3: %lu, ", g.get_in_degree(3));
+    printf("number of in-degrees for vertex 3: %lu, \n", g.get_in_degree(3));
 
     /* 3 test get number of out degrees */
     printf("\ntest get out degrees\n");
-    printf("number of out-degrees for vertex 1: %lu, ", g.get_out_degree(1));
+    printf("number of out-degrees for vertex 1: %lu, \n", g.get_out_degree(1));
 
     /* 3 test get number of neighbors */
     printf("\ntest get number of neighbors\n");
-    printf("number of neighbors for vertex 6: %lu, ", g.get_out_degree(6));
+    printf("number of neighbors for vertex 6: %lu, \n", g.get_out_degree(6));
 
     printf("----------------------------Test 3 end-------------------------------------\n");
     
