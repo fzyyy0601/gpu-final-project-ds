@@ -41,6 +41,11 @@ public:
         return graph_t.check_edge(row, col);
     }
 
+    /* 2 if edge is in the graph, return value. Otherwise, return not_found */
+    weight_t get_weight(size_t row, size_t col, weight_t not_found){
+        return graph_t.get_weight(row, col, not_found);
+    }
+
     /* 1 if edge is in the graph, return False. Otherwise, return True then inseert*/
     bool insert_edge(size_t row_h,
                     size_t col_h,
