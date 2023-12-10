@@ -48,6 +48,25 @@ void insert_vertex_d(size_t vertex, bool *v){
     v[vertex] = 1;
 }
 
+/* get list of destination vertex */
+__global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    int index = threadIdx.x + blockIdx.x * blockDim.x;
+    if(index < MAX_d && col_idx_d[index] == x){
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+    }
+}
+
+/* get list of source vertex */
+__global__ void get_source_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
+    int index = threadIdx.x + blockIdx.x * blockDim.x;
+    if(index < MAX_d && col_idx_d[index] == x){
+        int idx = atomicAdd(count, 1);
+        list[idx] = index;
+    }
+}
+
+
 template <typename weight_t>
 __global__
 void coo_insert_edge_d(size_t* row_idx_d,
@@ -365,4 +384,47 @@ public:
         }
         return res_h;
     }
+
+    /* return list of vertex */
+    std::vector<size_t> get_destination_vertex(size_t x){
+        int num = get_out_degree(x);
+        //int count = 0;
+        int* d_count;
+        size_t* list = (size_t*)malloc(num* sizeof(size_t));
+        size_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(size_t)* num);
+        //cudaMalloc(&d_count, sizeof(int));
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        get_destination_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_d);
+        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
+        std::vector<size_t> ret(num);
+        for(int i = 0; i < num; i++){
+            ret[i] = list[i];
+        }
+        cudaFree(&cudaList);
+        free(&list);
+        return ret;
+    }
+    std::vector<size_t> get_source_vertex(size_t x){
+        int num = get_in_degree(x);
+        //int count = 0;
+        int* d_count;
+        size_t* list = (size_t*)malloc(num* sizeof(size_t));
+        size_t* cudaList;
+        cudaMalloc(&cudaList, sizeof(size_t)* num);
+        //cudaMalloc(&d_count, sizeof(int));
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
+        get_source_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_d);
+        cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
+        //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
+        std::vector<size_t> ret(num);
+        for(int i = 0; i < num; i++){
+            ret[i] = list[i];
+        }
+        cudaFree(&cudaList);
+        free(&list);
+        return ret;
+    }
+
 };

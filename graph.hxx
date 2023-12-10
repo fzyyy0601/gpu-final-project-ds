@@ -78,4 +78,12 @@ public:
     bool delete_edge(size_t row_h,size_t col_h){
         return graph_t.delete_edge(row_h,col_h);
     }
+
+    std::vector<size_t> get_destination_vertex(size_t x){
+        return graph_t.get_destination_vertex(x);
+    }
+    // __host__ __device__ 
+    std::vector<size_t> get_source_vertex(size_t x){
+        return graph_t.get_source_vertex(x);
+    }
 };
