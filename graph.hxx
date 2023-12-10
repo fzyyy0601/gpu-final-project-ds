@@ -78,4 +78,8 @@ public:
     bool delete_edge(size_t row_h,size_t col_h){
         return graph_t.delete_edge(row_h,col_h);
     }
+
+    bool delete_vertex(size_t v_del){
+        return graph_t.delete_vertex(v_del);
+    }
 };
