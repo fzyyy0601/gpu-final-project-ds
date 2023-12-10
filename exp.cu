@@ -1,8 +1,10 @@
 #include "graph.hxx"
 #include "coo.hxx"
+#include "coo_h.h"
 #include <iostream>
 #include <vector>
 #include <time.h>
+
 
 int main(){
     /* set the random seed and clock */
@@ -19,10 +21,10 @@ int main(){
     size_t col_idx[] = {};
     int value[] = {};
     size_t e_num = 0;
-    size_t number_of_blocks = 50;
-    size_t threads_per_block = 256;
-    size_t MAX = 10000;
-    size_t test_times = 10000;
+    size_t number_of_blocks = 48;
+    size_t threads_per_block = 1024;
+    size_t MAX = 100000;
+    size_t test_times = 100000;
 
     /* print the initial graph we input */
     printf("The initial graph we input: \n");

@@ -329,9 +329,9 @@ public:
         cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
         get_degree<<<number_of_blocks, threads_per_block>>>(num, v, col_idx_d, e_num_h);
-        cudaError_t err = cudaGetLastError();
-        if (err != cudaSuccess) 
-            printf("Error: %s\n", cudaGetErrorString(err));
+        // cudaError_t err = cudaGetLastError();
+        // if (err != cudaSuccess) 
+        //     printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
         cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
@@ -349,9 +349,9 @@ public:
         cudaMemcpy(num, &res, sizeof(size_t), cudaMemcpyHostToDevice);
         cudaMemcpy(vd, &v, sizeof(size_t), cudaMemcpyHostToDevice);
         get_degree<<<number_of_blocks, threads_per_block>>>(num, v, row_idx_d, e_num_h);
-        cudaError_t err = cudaGetLastError();
-        if (err != cudaSuccess) 
-            printf("Error: %s\n", cudaGetErrorString(err));
+        // cudaError_t err = cudaGetLastError();
+        // if (err != cudaSuccess) 
+        //     printf("Error: %s\n", cudaGetErrorString(err));
         //bring data back 
         cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
