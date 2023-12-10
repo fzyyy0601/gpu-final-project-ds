@@ -50,19 +50,25 @@ void insert_vertex_d(size_t vertex, bool *v){
 
 /* get list of destination vertex */
 __global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < n && idx_d[index] == v) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
     }
 }
 
 /* get list of source vertex */
 __global__ void get_source_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
-    int index = threadIdx.x + blockIdx.x * blockDim.x;
-    if(index < MAX_d && col_idx_d[index] == x){
+    size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
+    size_t stride = gridDim.x * blockDim.x;
+    while (index < n && idx_d[index] == v) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
+        //atomicAdd((int *)num, 1);
+        index += stride;
     }
 }
 
@@ -103,9 +109,9 @@ void coo_delete_edge_d(size_t* row_idx_d,
     size_t index = blockIdx.x * blockDim.x + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
     while(index<e_num_d){
-        if (row_idx_d[index]==n_row_d&&col_idx_d[index]==n_col_d){
-            deleted_d[tail_d]=index;
-            row_idx_d[index]=-1;
+        if (row_idx_d[index] == n_row_d && col_idx_d[index] == n_col_d){
+            deleted_d[tail_d] = index;
+            row_idx_d[index] = -1;
             *res=1;
             return;
         }
