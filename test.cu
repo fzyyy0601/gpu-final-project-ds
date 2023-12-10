@@ -126,18 +126,19 @@ int main(){
 
     printf("----------------------------Test 3 end-------------------------------------\n");
     
-    printf("----------------------------Test 3 begin-------------------------------------\n");
+    printf("----------------------------Test 4 begin-------------------------------------\n");
     printf("\nget source of 1:\n");
     std::vector<size_t> source = g.get_source_vertex(1);
+    printf(source.size);
     // for(size_t each: source){
     //     printf("\t%lu", each);
     // }
-    for(auto t: source) cout<<t<<" ";
+    // for(auto t: source) cout<<t<<" ";
     printf("\nget destination of 1:\n");
     std::vector<size_t> destination = g.get_destination_vertex(1);
-    for(size_t each: destination){
-        printf("\t%lu", each);
-    }
+    // for(size_t each: destination){
+    //     printf("\t%lu", each);
+    // }
     printf("----------------------------Test 4 end-------------------------------------\n");
      
 
