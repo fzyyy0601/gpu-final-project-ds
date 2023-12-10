@@ -52,7 +52,7 @@ void insert_vertex_d(size_t vertex, bool *v){
 __global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
     size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
-    while (index < n && idx_d[index] == v) {
+    while (index < MAX_d && col_idx_d[index] == x) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
         //atomicAdd((int *)num, 1);
@@ -64,7 +64,7 @@ __global__ void get_destination_vertex_d(size_t* list, size_t x, size_t *col_idx
 __global__ void get_source_vertex_d(size_t* list, size_t x, size_t *col_idx_d, int* count, size_t MAX_d){
     size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
-    while (index < n && idx_d[index] == v) {
+    while (index < MAX_d && col_idx_d[index] == x) {
         int idx = atomicAdd(count, 1);
         list[idx] = index;
         //atomicAdd((int *)num, 1);
@@ -401,7 +401,7 @@ public:
         cudaMalloc((void**) &cudaList, sizeof(size_t)* num);
         cudaMalloc((void**) &d_count, sizeof(int));
         cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        get_destination_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, MAX_h);
+        get_destination_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, col_idx_d, d_count, e_num_h);
         cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
         std::vector<size_t> ret(num);
@@ -423,7 +423,7 @@ public:
         cudaMalloc((void**)&cudaList, sizeof(size_t)* num);
         cudaMalloc((void**) &d_count, sizeof(int));
         cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyHostToDevice);
-        get_source_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, MAX_h);
+        get_source_vertex_d<<<number_of_blocks, threads_per_block>>>(cudaList, x, row_idx_d, d_count, e_num_h);
         cudaMemcpy(list, cudaList, sizeof(size_t)* num, cudaMemcpyDeviceToHost);
         //cudaMemcpy(d_count, &count, sizeof(int), cudaMemcpyDeviceToHost);
         std::vector<size_t> ret(num);
