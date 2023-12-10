@@ -137,7 +137,7 @@ int main(){
 
     printf("----------------------------Test 4 end-------------------------------------\n");
     printf("----------------------------Test 5 begin------------------------------------\n");
-    printf("\ntest get source or destination of vertex\n");
+    printf("\ntest get destination of vertex\n");
 
     printf("\nget destination of 1:\n");
     std::vector<size_t> destination = g.get_destination_vertex(1);
@@ -150,6 +150,7 @@ int main(){
         printf("\n");
     }
 
+    printf("\ntest get source of vertex\n");
     std::vector<size_t> source = g.get_source_vertex(1);
     if(source.empty()) 
         printf("No source vertex for 1.\n");
