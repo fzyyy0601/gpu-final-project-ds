@@ -134,7 +134,7 @@ int main(){
     }
     printf("\nget destination of 1:\n");
     std::vector<size_t> destination = g.get_destination_vertex(1);
-    fot(size_t each: destination){
+    for(size_t each: destination){
         printf("\t%lu", each);
     }
     printf("----------------------------Test 4 end-------------------------------------\n");
