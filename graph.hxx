@@ -80,13 +80,17 @@ public:
         return graph_t.delete_edge(row_h,col_h);
     }
 
+    /* 4 Delete edge (row_h,col_h,value_h) */
     bool delete_vertex(size_t v_del){
         return graph_t.delete_vertex(v_del);
     }
+    
+    /* 3 return list of destination vertex */
     std::vector<size_t> get_destination_vertex(size_t x){
         return graph_t.get_destination_vertex(x);
     }
-    // __host__ __device__
+    
+    /* 3 return list of source vertex */
     std::vector<size_t> get_source_vertex(size_t x){
         return graph_t.get_source_vertex(x);
     }
