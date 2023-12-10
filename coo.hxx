@@ -285,4 +285,10 @@ public:
         cudaMemcpy(&res, num, sizeof(size_t), cudaMemcpyDeviceToHost);
         return res;
     }
+
+    size_t get_num_neighbors(size_t x){
+        size_t in_num = get_in_degree(x);
+        size_t out_num = get_out_degree(x);
+        return in_num + out_num;
+    }
 };
