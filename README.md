@@ -1,4 +1,6 @@
-# gpu-final-project-ds
+# gpu-final-project-ds 
+
+# Project #8: Data Structure Library for GPUs: Graphs
 
 ## 1. 有权，同质，有向图
 
