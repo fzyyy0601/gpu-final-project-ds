@@ -13,16 +13,21 @@ This is the graph we test
 */
 
 int main(){
-    graph<int,coo> g;
-    size_t v_list_h[]={1,2,3,4,5,6,8};
-    size_t v_num_h=7;
-    size_t row_idx_h[]={1,1,4,3,5};
-    size_t col_idx_h[]={2,3,5,4,6};
-    int value_h[]={5,7,2,4,6};
-    size_t e_num_h=5;
-    size_t number_of_blocks=4;
+    /* intital graph configuration */
+    graph<int,coo> g;           // create a graph in device
+    size_t v_list_h[]={1,2,3,4,5,6,8};  // intinal vertex list
+    size_t v_num_h=7;           // initial number of vertices
+    size_t row_idx_h[]={1,1,4,3,5}; // initial row index (source of each edge)
+    size_t col_idx_h[]={2,3,5,4,6}; // initial col index (target of each edge)
+    int value_h[]={5,7,2,4,6};  // initial weight for each edge
+    size_t e_num_h=5;           // intinal number of edges
+    size_t MAX_h=10;            // max number of edges
+    
+    /* initial configuration for the kernel call */
+    size_t number_of_blocks=4;  
     size_t threads_per_block=4;
-    size_t MAX_h=10;
+
+    /* print graph config for initialization*/
     printf("Graph config for initialization:");
     printf("\nv_list_h: ");
     for(int i=0;i<v_num_h;i++){
