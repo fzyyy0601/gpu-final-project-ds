@@ -17,6 +17,11 @@ public:
         graph_t.print();
     }
 
+    /* 1 print the graph configuration */
+    void print_config(){
+        graph_t.print_config();
+    }
+
     /* 1 modify grid size and block size*/
     void modify_config(size_t number_of_blocks,size_t threads_per_block){
         graph_t.modify_config(number_of_blocks,threads_per_block);

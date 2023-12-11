@@ -41,8 +41,10 @@ void get_weight_d(size_t row, size_t col, size_t *row_idx, size_t *col_idx, weig
 __global__ void get_degree(size_t *num, size_t v, size_t *idx_d, size_t n) {
     size_t index = (blockIdx.x * blockDim.x) + threadIdx.x;
     size_t stride = gridDim.x * blockDim.x;
-    while (index < n && idx_d[index] == v) {
-        atomicAdd((int *)num, 1);
+    while (index < n) {
+        if (idx_d[index] == v){
+            atomicAdd((int *)num, 1);
+        }
         index += stride;
     }
 }
@@ -125,7 +127,6 @@ void coo_delete_vertex_d(size_t* row_idx_d,
                     size_t* deleted_d,
                     bool *v_d,
                     size_t tail_d,
-                    bool *res,
                     size_t *num,
                     size_t MAX_d){
     size_t index = blockIdx.x * blockDim.x + threadIdx.x;
@@ -135,7 +136,6 @@ void coo_delete_vertex_d(size_t* row_idx_d,
         if (row_idx_d[index] == v_del || col_idx_d[index] == v_del){
             row_idx_d[index] = -1;
             col_idx_d[index] = -1;
-            *res = 1;
             int idx = atomicAdd((int *)num, 1);
             deleted_d[(tail_d + idx) % MAX_d] = index;
         }
@@ -205,7 +205,7 @@ public:
 
     /* 1 print the graph */
     void print(){
-        bool v_h[MAX_h];
+        bool v_h[MAX_h*8];
         size_t row_idx_h[MAX_h];
         size_t col_idx_h[MAX_h];
         weight_t value_h[MAX_h];
@@ -239,6 +239,11 @@ public:
             printf("%lu ",deleted_h[i%MAX_h]);
         }
         printf("\n---------------graph end----------------\n");
+    }
+
+    /* 1 print the graph configuration */
+    void print_config(){
+        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu ,gridsize=%lu, blocksize=%lu\n",v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
     }
 
     ~coo(){
@@ -416,34 +421,23 @@ public:
         return res_h;
     }
 
-    /* 4 Delete edge (row_h,col_h,value_h) */
+    /* 4 Delete vertex (row_h,col_h,value_h) */
     bool delete_vertex(size_t x){
         if (!(check_vertex(x))){
             return false;
         }
-        bool res_h = 0;
-        bool *res_d;
         size_t num_h = 0;
         size_t *num_d;
-        cudaMalloc((void**) &res_d, sizeof(bool));
         cudaMalloc((void**) &num_d, sizeof(size_t));
-        cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
         cudaMemcpy(num_d, &num_h, sizeof(size_t), cudaMemcpyHostToDevice);
 
-        coo_delete_vertex_d<<<number_of_blocks,threads_per_block>>>(row_idx_d, col_idx_d, e_num_h, x, deleted_d, v_d, tail_h, res_d, num_d, MAX_h);
+        coo_delete_vertex_d<<<number_of_blocks,threads_per_block>>>(row_idx_d, col_idx_d, e_num_h, x, deleted_d, v_d, tail_h, num_d, MAX_h);
 
-        cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
         cudaMemcpy(&num_h, num_d, sizeof(size_t), cudaMemcpyDeviceToHost);
-        cudaFree(&res_d);
         cudaFree(&num_d);
-        while(num_h > 0){
-            tail_h = tail_h+1;
-            if(tail_h == MAX_h){
-                tail_h = 0;
-            }
-            num_h -= 1;
-        }
-        return res_h;
+        tail_h=(tail_h+num_h)%MAX_h;
+        v_num_h-=1;
+        return true;
     }
 
     /* 3 return list of destination vertex */

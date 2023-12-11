@@ -8,13 +8,13 @@
 
 int main(){
     /* set the random seed and clock */
-    srand(time(0));
+    srand(0);
     double time_taken;
     clock_t start, end;
     clock_t T_start, T_end;
 
     /* initialize an empty graph*/
-    graph<int,coo> g;
+    graph<int,coo_h> g;
     size_t v_list[] = {};
     size_t v_num = 0;
     size_t row_idx[] = {};
@@ -23,8 +23,9 @@ int main(){
     size_t e_num = 0;
     size_t number_of_blocks = 48;
     size_t threads_per_block = 1024;
-    size_t MAX = 100000;
-    size_t test_times = 100000;
+    size_t MAX_V = 10000;
+    size_t MAX = 1000000;
+    size_t test_times = MAX;
 
     /* print the initial graph we input */
     printf("The initial graph we input: \n");
@@ -65,7 +66,7 @@ int main(){
     /* insert test_times edges */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.insert_vertex(rand() % MAX);
+        g.insert_vertex(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -74,7 +75,7 @@ int main(){
     /* insert test_times edges */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.insert_edge(rand() % MAX, rand() % MAX, rand() % MAX);
+        g.insert_edge(rand() % MAX_V, rand() % MAX_V, rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -83,7 +84,7 @@ int main(){
     /* check test_times edges */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.check_edge(rand() % MAX, rand() % MAX);
+        g.check_edge(rand() % MAX_V, rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -92,7 +93,7 @@ int main(){
     /* check test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.check_vertex(rand() % MAX);
+        g.check_vertex(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -101,7 +102,7 @@ int main(){
     /* get weight*/
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_weight(rand() % MAX, rand() % MAX, -1);
+        g.get_weight(rand() % MAX_V, rand() % MAX_V, -1);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -110,7 +111,7 @@ int main(){
     /* get in degree of test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_in_degree(rand() % MAX);
+        g.get_in_degree(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -119,7 +120,7 @@ int main(){
     /* get out degree of test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_out_degree(rand() % MAX);
+        g.get_out_degree(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -128,7 +129,7 @@ int main(){
     /* get number of neighbors test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_num_neighbors(rand() % MAX);
+        g.get_num_neighbors(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -137,7 +138,7 @@ int main(){
     /* get source of test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_source_vertex(rand() % MAX);
+        g.get_source_vertex(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -146,7 +147,7 @@ int main(){
     /* get destination of test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.get_destination_vertex(rand() % MAX);
+        g.get_destination_vertex(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -155,7 +156,7 @@ int main(){
     /* delete test_times edges */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.delete_edge(rand() % MAX, rand() % MAX);
+        g.delete_edge(rand() % MAX_V, rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
@@ -164,7 +165,7 @@ int main(){
     /* delete test_times vertices */
     start = clock();
     for (int i = 0; i < test_times; i ++) {
-        g.delete_vertex(rand() % MAX);
+        g.delete_vertex(rand() % MAX_V);
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;

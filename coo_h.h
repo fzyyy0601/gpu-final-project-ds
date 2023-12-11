@@ -77,6 +77,11 @@ public:
         printf("\n---------------graph end----------------\n");
     }
 
+    /* 1 print the graph configuration */
+    void print_config(){
+        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu\n",v_num,e_num,head,tail,MAX);
+    }
+
     /* 1 modify grid size and block size*/
     void modify_config(size_t number_of_blocks,size_t threads_per_block){
     }
@@ -218,17 +223,19 @@ public:
         if(!v[x]){
             return false;
         }
+        v[x]=0;
         for(size_t i=0;i<e_num;i++){
             if(row_idx[i]==x||col_idx[i]==x){
-                row_idx[i]=col_idx[i]=-1;
+                row_idx[i]=-1;
+                col_idx[i]=-1;
                 deleted[tail]=i;
                 tail=tail+1;
                 if(tail==MAX){
                     tail=0;
                 }
-                return true;
             }
         }
+        v_num-=1;
         return true;
     }
 
@@ -245,7 +252,7 @@ public:
     std::vector<size_t> get_source_vertex(size_t x){
         std::vector<size_t> ret;
         for(size_t i=0;i<e_num;i++){
-            if(col_idx[i]==x) ret.push_back(col_idx[i]);
+            if(col_idx[i]==x) ret.push_back(row_idx[i]);
         }
         return ret;
     }
