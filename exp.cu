@@ -81,15 +81,16 @@ void init(int vn,int en){
 int main(){
     /* set the random seed and clock */
     srand(0);
-//    init(10,20);
-    init(10000,1000000);
     double time_taken;
     clock_t start, end;
     clock_t T_start, T_end;
 
-    /* initialize an empty graph*/
-    graph<int,coo> g;
+    
+    //    init(10,20);
+    init(10000,1000000);
 
+    /* create an empty graph*/
+    graph<int,coo> g;
 
     // /* print the initial graph we input */
     // printf("The initial graph we input: \n");
@@ -241,7 +242,6 @@ int main(){
 
     // /* test print*/
     // g.print();
-
     // /* 2 test get number of vertices and edges */
     // printf("\ntest get number of vertices and edges\n");
     // printf("number of vertices: %lu, ", g.get_number_of_vertices());
