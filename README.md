@@ -13,6 +13,8 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
  - test.cu - cuda code to test whether the GPU version runs correctly on a very small graph
  - compare.cu - cuda code to check whether the GPU version and the CPU give the same result for same operations
  - exp.cu - cuda code to run the data structure and measure the time
+ - some_is_sleeping_on_cuda2.jpg - someone has occupied the memory of the GPU on server cuda2 and not used the computation resources for more than 2 days. As a result, we can not use the cuda2 to test our data structure
+ - person_sleeping_on_cuda2.png - the name of the process that occupies cuda2 and does nothing
 
 ## 2. Project report link
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
@@ -34,7 +36,7 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
 12.13 to submit report, code and readme.md
 
 ## 5. Team Member
- - 1 Shidong Zhang
- - 2 Baijia Ye
- - 3 Ziyue Feng
- - 4 Changyue Su
+ - Shidong Zhang
+ - Baijia Ye
+ - Ziyue Feng
+ - Changyue Su
