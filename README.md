@@ -9,7 +9,7 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
  - README.md - give an introduction to this repository
  - graph.hxx - head file storing the definition of the class graph, 
  - coo_d.hxx - head file storing the definition of the class coo_d, the GPU version of the data structure
- - coo_h.hxx - head file storing the definition of the class coo_h, the CPU version of the data structure
+ - coo_h.h - head file storing the definition of the class coo_h, the CPU version of the data structure
  - test.cu - cuda code to test whether the GPU version runs correctly on a very small graph
  - compare.cu - cuda code to check whether the GPU version and the CPU give the same result for same operations
  - exp.cu - cuda code to run the data structure and measure the time
