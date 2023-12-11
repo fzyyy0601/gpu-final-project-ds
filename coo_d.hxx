@@ -168,8 +168,8 @@ void coo_delete_vertex_d(size_t* row_idx_d,
 }
 
 
-/* our class to store the graph with coo */
-template<typename weight_t> class coo{
+/* our class to store the graph with coo_d */
+template<typename weight_t> class coo_d{
     bool *v_d;          // vertex list, v_d[i] == 1 means node i is in the graph
     size_t *row_idx_d;  // source of each edge 
     size_t *col_idx_d;  // target of each edge 
@@ -269,7 +269,7 @@ public:
         printf("\n---------------graph end----------------\n");
     }
 
-    ~coo(){
+    ~coo_d(){
         cudaFree(v_d);
         cudaFree(row_idx_d);
         cudaFree(col_idx_d);

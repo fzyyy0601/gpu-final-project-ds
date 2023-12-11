@@ -1,5 +1,5 @@
 #include "graph.hxx"
-#include "coo.hxx"
+#include "coo_d.hxx"
 #include "coo_h.h"
 #include <iostream>
 #include <vector>
@@ -88,7 +88,7 @@ int main(){
     init();
 
     /* create an empty graph*/
-    graph<int,coo> g;
+    graph<int,coo_d> g;
 
     // /* print the initial graph we input */
     // printf("The initial graph we input: \n");

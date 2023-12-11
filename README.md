@@ -8,7 +8,7 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
 ## 2. Files Description
  - README.md - give an introduction to this repository
  - graph.hxx - head file storing the definition of the class graph, 
- - coo.hxx - head file storing the definition of the class coo, the GPU version of the data structure
+ - coo_d.hxx - head file storing the definition of the class coo_d, the GPU version of the data structure
  - coo_h.hxx - head file storing the definition of the class coo_h, the CPU version of the data structure
  - test.cu - cuda code to test whether the GPU version runs correctly on a very small graph
  - compare.cu - cuda code to check whether the GPU version and the CPU give the same result for same operations
@@ -28,11 +28,11 @@ To create a graph of any type on host or device
     graph<weight_t, graph_view_t> somegraph;
 
     // weight_t: type of edge weight
-    // graph_view_t: "coo" to store graph on GPU, "coo_h" to store graph on CPU
+    // graph_view_t: "coo_d" to store graph on GPU, "coo_h" to store graph on CPU
 
 For expample, you can create a graph whose edge weight is of type "int" on GPU by
 
-    graph<int, coo> g; 
+    graph<int, coo_d> g; 
 
 
 To initialize a graph  

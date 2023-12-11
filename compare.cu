@@ -1,5 +1,5 @@
 #include "graph.hxx"
-#include "coo.hxx"
+#include "coo_d.hxx"
 #include "coo_h.h"
 #include <iostream>
 #include <vector>
@@ -17,7 +17,7 @@ int main(){
     clock_t T_start, T_end;
 
     /* initialize an empty graph*/
-    graph<int,coo> g;           // create a graph in device
+    graph<int,coo_d> g;           // create a graph in device
     graph<int,coo_h> gh;        // create a graph in host
     size_t v_list[] = {};       // intinal vertex list
     size_t e_num = 0;           // intinal number of edges, e_num should smaller than MAX+test_times

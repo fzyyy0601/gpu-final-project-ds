@@ -1,5 +1,5 @@
 #include "graph.hxx"
-#include "coo.hxx"
+#include "coo_d.hxx"
 #include <iostream>
 #include <vector>
 
@@ -14,7 +14,7 @@ This is the graph we test
 
 int main(){
     /* intital graph configuration */
-    graph<int,coo> g;           // create a graph in device
+    graph<int,coo_d> g;           // create a graph in device
     size_t v_list_h[]={1,2,3,4,5,6,8};  // intinal vertex list
     size_t v_num_h=7;           // initial number of vertices
     size_t row_idx_h[]={1,1,4,3,5}; // initial row index (source of each edge)
