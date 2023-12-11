@@ -18,7 +18,7 @@ void coo_init_v_d(bool *v_d,
 
 /* kernel function for checking whether an edge is in the graph*/
 __global__
-void find_edge_d(size_t row, 
+void check_edge_d(size_t row, 
                 size_t col, 
                 size_t *row_idx, 
                 size_t *col_idx, 
@@ -317,7 +317,7 @@ public:
         cudaMalloc((void**) &res_d, sizeof(bool));
         cudaMemcpy(res_d, &res_h, sizeof(bool), cudaMemcpyHostToDevice);
 
-        find_edge_d<<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, e_num_h, res_d);
+        check_edge_d<<<number_of_blocks, threads_per_block>>>(row, col, row_idx_d, col_idx_d, e_num_h, res_d);
         
         cudaMemcpy(&res_h, res_d, sizeof(bool), cudaMemcpyDeviceToHost);
         cudaFree(&res_d);
