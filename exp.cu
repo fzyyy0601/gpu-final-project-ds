@@ -8,25 +8,24 @@
 #include <utility>
 #include <algorithm>
 
-const size_t MAX_V = 20000;
-const size_t MAX = 2000000;
-size_t test_times = 1000;
-size_t v_list[MAX_V];
+/* intital graph configuration */
+const size_t MAX_V = 20000; // max number of vertices
+const size_t MAX = 2000000; // max number of edges
+size_t test_times = 1000;   // test times
+size_t v_num = 10000;       // initial number of vertices
+size_t e_num = 1000000;     // intinal number of edges, e_num should smaller than MAX+test_times
+size_t v_list[MAX_V];       // intinal vertex list
+size_t row_idx[MAX] = {};   // initial row index (source of each edge)
+size_t col_idx[MAX] = {};   // initial col index (target of each edge)
+int value[MAX] = {};        // initial weight for each edge
 
-size_t row_idx[MAX] = {};
-size_t col_idx[MAX] = {};
-int value[MAX] = {};
-
-size_t v_num = 0;
-// e_num should smaller than MAX+test_times
-size_t e_num = 0;
-
+/* configuration for the kernel call */
 size_t number_of_blocks = 160;
 size_t threads_per_block = 1024;
 
-void init(int vn,int en){
-    v_num=vn;
-    e_num=en;
+/* randomly create an intial graph in the host according to 
+    number of vertices, edges and max number of vertices */
+void init(){
     if(v_num>MAX_V/2){
         std::vector<int> v;
         for(int i=0;i<MAX_V;i++){
@@ -85,9 +84,8 @@ int main(){
     clock_t start, end;
     clock_t T_start, T_end;
 
-    
-    //    init(10,20);
-    init(10000,1000000);
+    /* create an initial graph in host */
+    init();
 
     /* create an empty graph*/
     graph<int,coo> g;
@@ -126,7 +124,7 @@ int main(){
     g.init(v_list, v_num, row_idx, col_idx, value, e_num, number_of_blocks, threads_per_block, MAX);
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("initialization: %lf s\n", time_taken);
+    printf("initialization: %.2lf s\n", time_taken);
 
     /* insert test_times edges */
     start = clock();
@@ -135,7 +133,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("insert %d vertices: %lf s\n", test_times, time_taken);
+    printf("insert %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* insert test_times edges */
     start = clock();
@@ -144,7 +142,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("insert %d edges: %lf s\n", test_times, time_taken);
+    printf("insert %d edges: %.2lf s\n", test_times, time_taken);
 
     /* check test_times edges */
     start = clock();
@@ -153,7 +151,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("check %d edges: %lf s\n", test_times, time_taken);
+    printf("check %d edges: %.2lf s\n", test_times, time_taken);
 
     /* check test_times vertices */
     start = clock();
@@ -162,7 +160,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("check %d vertices: %lf s\n", test_times, time_taken);
+    printf("check %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* get weight*/
     start = clock();
@@ -171,7 +169,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get weight of %d edges: %lf s\n", test_times, time_taken);
+    printf("get weight of %d edges: %.2lf s\n", test_times, time_taken);
 
     /* get in degree of test_times vertices */
     start = clock();
@@ -180,7 +178,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get in degree of %d vertices: %lf s\n", test_times, time_taken);
+    printf("get in degree of %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* get out degree of test_times vertices */
     start = clock();
@@ -189,7 +187,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get out degree of %d vertices: %lf s\n", test_times, time_taken);
+    printf("get out degree of %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* get number of neighbors test_times vertices */
     start = clock();
@@ -198,7 +196,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get num of neighbors of %d vertices: %lf s\n", test_times, time_taken);
+    printf("get num of neighbors of %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* get source of test_times vertices */
     start = clock();
@@ -207,7 +205,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get source of %d vertices: %lf s\n", test_times, time_taken);
+    printf("get source of %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* get destination of test_times vertices */
     start = clock();
@@ -216,7 +214,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("get destination of %d vertices: %lf s\n", test_times, time_taken);
+    printf("get destination of %d vertices: %.2lf s\n", test_times, time_taken);
 
     /* delete test_times edges */
     start = clock();
@@ -225,7 +223,7 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("delete %d edges: %lf s\n", test_times, time_taken);
+    printf("delete %d edges: %.2lf s\n", test_times, time_taken);
 
     /* delete test_times vertices */
     start = clock();
@@ -234,11 +232,11 @@ int main(){
     }
     end = clock();
     time_taken = ((double)(end - start))/ CLOCKS_PER_SEC;
-    printf("delete %d vertices: %lf s\n", test_times, time_taken);
+    printf("delete %d vertices: %.2lf s\n", test_times, time_taken);
 
     T_end = clock();
     time_taken = ((double)(T_end - T_start))/ CLOCKS_PER_SEC;
-    printf("Total time: %lf s\n", time_taken);
+    printf("Total time: %.2lf s\n", time_taken);
 
     // /* test print*/
     // g.print();

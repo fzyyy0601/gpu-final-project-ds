@@ -9,12 +9,10 @@
 
 int main(){
     /* set the random seed and clock */
-    int c=time(0);
-    std::cout<<sizeof(char)<<" "<<sizeof(size_t)<<" "<<sizeof(bool)<<" "<<sizeof(short)<<" "<<sizeof(int)<<"\n";
-//    printf("%lld\n",1ll*sizeof(char));
-    printf("RANDSEED c =%d\n",c);
+    // int c=time(0);
+    // printf("RANDSEED c =%d\n",c);
     srand(0);
-    for(int i=0;i<10000;i++) std::cout<<rand()<<" ";
+    // for(int i=0;i<10000;i++) std::cout<<rand()<<" ";
     double time_taken;
     clock_t start, end;
     clock_t T_start, T_end;
@@ -61,7 +59,7 @@ int main(){
     }
     printf("\n");
 
-    printf("\n ----------------------------Test begin------------------------------------\n");
+    printf("\n ----------------------------Evaluation begin------------------------------------\n");
 
     /* test initialization */
     T_start = clock();
@@ -292,7 +290,7 @@ int main(){
     // printf("number of edges: %lu\n", g.get_number_of_edges());
 
 
-    printf("----------------------------Test end---------------------------------------\n");
+    printf("----------------------------Evaluation end---------------------------------------\n");
 
     return 0;
 }

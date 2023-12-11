@@ -47,6 +47,8 @@ public:
         memcpy(this->value.data(),value,e_num*sizeof(weight_t));
 
         this->deleted.resize(MAX);
+
+        printf("Graph initialzed in CPU\n");
     }
 
     /* 1 print the graph */
