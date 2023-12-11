@@ -3,6 +3,7 @@
 # Project #8: Data Structure Library for GPUs: Graphs
 
 ## 1. Introduction
+This project creates a data structure using CUDA with C++ to store a graph. The graph can be directed and is able to record weight for each edge. We provide two version of the data stucture, a CPU version (host) and a GPU version (device). Both versions use coordinate list (COO) method to store the adjacent matrix of the graph, which can save a lot of space when the graph is sparce. The CPU version stores all the information of the graph on the host and do all the operations sequentially on the host, while the GPU version stores the coordinate list on the device and accerlate operations through parallelization. Through testing, we find that, when the graph is big, the GPU version runs much faster for operations that have to traverse the whole coordinate list.
 
 ## 2. Project report link
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
@@ -23,7 +24,7 @@
 ## 4. DDL
 12.13 to submit report, coed and readme.md
 
-## 5. task split
+## 5. Team Member
  - 1 Shidong Zhang
  - 2 Baijia Ye
  - 3 Ziyue Feng
