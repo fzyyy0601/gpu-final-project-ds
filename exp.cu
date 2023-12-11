@@ -4,54 +4,118 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <map>
+#include <utility>
+#include <algorithm>
 
+const size_t MAX_V = 20000;
+const size_t MAX = 2000000;
+size_t test_times = 1000;
+size_t v_list[MAX_V];
+
+size_t row_idx[MAX] = {};
+size_t col_idx[MAX] = {};
+int value[MAX] = {};
+
+size_t v_num = 0;
+// e_num should smaller than MAX+test_times
+size_t e_num = 0;
+
+size_t number_of_blocks = 160;
+size_t threads_per_block = 1024;
+
+void init(int vn,int en){
+    v_num=vn;
+    e_num=en;
+    if(v_num>MAX_V/2){
+        std::vector<int> v;
+        for(int i=0;i<MAX_V;i++){
+            v.push_back(i);
+        }
+        std::random_shuffle(v.begin(),v.end());
+        for(int i=0;i<v_num;i++){
+            v_list[i]=v[i];
+        }
+    }
+    else{
+        std::map<int,int> mp;
+        while(mp.size()<v_num){
+            int cx=rand()%MAX_V;
+            if(mp.count(cx)){
+                continue;
+            }
+            v_list[mp.size()]=cx;
+            mp[cx]=1;
+        }
+    }
+    if(e_num>v_num*v_num/4){
+        std::vector<std::pair<int,int> > v;
+        for(int i=0;i<v_num;i++){
+            for(int j=0;j<v_num;j++){
+                v.push_back(std::make_pair(v_list[i],v_list[j]));
+            }
+        }
+        std::random_shuffle(v.begin(),v.end());
+        for(int i=0;i<e_num;i++){
+            row_idx[i]=v[i].first;
+            col_idx[i]=v[i].second;
+            value[i]=rand();
+        }
+    }
+    else{
+        std::map<std::pair<int,int>,int> mp;
+        while(mp.size()<e_num){
+            int a=rand()%v_num,b=rand()%v_num,c=rand();
+            if(mp.count(std::make_pair(a,b))){
+                continue;
+            }
+            int idx=mp.size();
+            row_idx[idx]=v_list[a];
+            col_idx[idx]=v_list[b];
+            value[idx]=c;
+            mp[std::make_pair(a,b)]=c;
+        }
+    }
+}
 
 int main(){
     /* set the random seed and clock */
     srand(0);
+//    init(10,20);
+    init(10000,1000000);
     double time_taken;
     clock_t start, end;
     clock_t T_start, T_end;
 
     /* initialize an empty graph*/
-    graph<int,coo_h> g;
-    size_t v_list[] = {};
-    size_t v_num = 0;
-    size_t row_idx[] = {};
-    size_t col_idx[] = {};
-    int value[] = {};
-    size_t e_num = 0;
-    size_t number_of_blocks = 48;
-    size_t threads_per_block = 1024;
-    size_t MAX_V = 10000;
-    size_t MAX = 1000000;
-    size_t test_times = MAX;
+    graph<int,coo> g;
 
-    /* print the initial graph we input */
-    printf("The initial graph we input: \n");
-    printf("v_list: ");
-    for(int i = 0; i < v_num; i++){
-        printf("%lu ", v_list[i]);
-    }
-    printf("\n");
+
+    // /* print the initial graph we input */
+    // printf("The initial graph we input: \n");
+    // printf("v_list: ");
+    // for(int i = 0; i < v_num; i++){
+    //     printf("%lu ", v_list[i]);
+    // }
+    // printf("\n");
     
-    printf("row_idx: ");
-    for(int i = 0; i < e_num; i++){
-        printf("%lu ", row_idx[i]);
-    }
-    printf("\n");
+    // printf("row_idx: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%lu ", row_idx[i]);
+    // }
+    // printf("\n");
     
-    printf("col_idx: ");
-    for(int i = 0; i < e_num; i++){
-        printf("%lu ", col_idx[i]);
-    }
-    printf("\n");
+    // printf("col_idx: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%lu ", col_idx[i]);
+    // }
+    // printf("\n");
     
-    printf("value: ");
-    for(int i = 0; i < e_num; i++){
-        printf("%d ", value[i]);
-    }
-    printf("\n");
+    // printf("value: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%d ", value[i]);
+    // }
+    // printf("\n");
 
     printf("\n ----------------------------Test begin------------------------------------\n");
 
