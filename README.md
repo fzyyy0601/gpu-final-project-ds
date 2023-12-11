@@ -16,6 +16,11 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
  - some_is_sleeping_on_cuda2.jpg - someone has occupied the memory of the GPU on server cuda2 and not used the computation resources for more than 2 days. As a result, we can not use the cuda2 to test our data structure
  - person_sleeping_on_cuda2.png - the name of the process that occupies cuda2 and does nothing
 
+## 3. Evironment Setting
+Our code could be compiled with cuda-11.4 and gcc-4.8.5 and could be run correctly on the NYU cims server - cuda1, cuda3, cuda4 and, cuda5. We could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 days.
+![alt text](some_is_sleeping_on_cuda2.jpg)
+![alt text](person_sleeping_on_cuda2.png)
+
 ## 2. Project report link
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
