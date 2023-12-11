@@ -5,7 +5,7 @@
 ## 1. Introduction
 This project creates a data structure using CUDA with C++ to store a graph. The graph can be directed and is able to record weight for each edge. We provide two version of the data stucture, a CPU version (host) and a GPU version (device). Both versions use coordinate list (COO) method to store the adjacent matrix of the graph, which can save a lot of space when the graph is sparce. The CPU version stores all the information of the graph on the host and do all the operations sequentially on the host, while the GPU version stores the coordinate list on the device and accerlate operations through parallelization. Through testing, we find that, when the graph is big, the GPU version runs much faster for operations that have to traverse the whole coordinate list.
 
-## 2. Files Details
+## 2. Files Description
  - README.md - give an introduction to this repository
  - graph.hxx - head file storing the definition of the class graph, 
  - coo.hxx - head file storing the definition of the class coo, the GPU version of the data structure
@@ -15,32 +15,185 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
  - exp.cu - cuda code to run the data structure and measure the time
  - some_is_sleeping_on_cuda2.jpg - someone has occupied the memory of the GPU on server cuda2 and not used the computation resources for more than 2 days. As a result, we can not use the cuda2 to test our data structure
  - person_sleeping_on_cuda2.png - the name of the process that occupies cuda2 and does nothing
+ 
 
-## 3. Evironment Setting
-Our code could be compiled with cuda-11.4 and gcc-4.8.5 and could be run correctly on the NYU cims server - cuda1, cuda3, cuda4 and, cuda5. We could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 days.
-![alt text](some_is_sleeping_on_cuda2.jpg)
-![alt text](person_sleeping_on_cuda2.png)
+## 3. To Use Class graph
+More examples could be found in test.cu, compare.cu, and exp.cu
 
-## 2. Project report link
-[report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
-## 3. To do
+### Create and Initialize a "graph" object
 
-### Todo
+To create a graph of any type on host or device
+    
+    graph<weight_t, graph_view_t> somegraph;
 
+    // weight_t: type of edge weight
+    // graph_view_t: "coo" to store graph on GPU, "coo_h" to store graph on CPU
+
+For expample, you can create a graph whose edge weight is of type "int" on GPU by
+
+    graph<int, coo> g; 
+
+
+To initialize a graph  
+
+    void init(size_t* v_list,         // vertex list
+              size_t v_num,           // number of vertex list
+              size_t* row_idx,        // row index (source of each edge)
+              size_t* col_idx,        // col index (target of each edge)
+              weight_t* value,        // weight for each edge
+              size_t e_num,           // number of edges
+              size_t number_of_blocks,  // girdsize for kernel launch
+              size_t threads_per_block, // blocksize for kernel launch
+              size_t MAX);             // max number of vertices 
+
+If you put the graph in the host, the number_of_blocks and threads_per_block can be any number and not influence the result.
+
+For example, you can initialize a graph like this 
+
+    g.init( {1,2,3,4,5,6,8},    // vertex list     
+            7,                  // 7 vertices in total
+            {1,1,4,3,5},        // sources of each edge
+            {2,3,5,4,6},        // target of each edge
+            {5,7,2,4,6},        // weight of each edge
+            5,                  // 5 edges in total
+            50,                 // 50 blocks
+            256,                // 256 threads per block
+            10);                // 10 vertices at most
+
+
+### Change the graph
+To insert a new vertex
+    
+    bool insert_vertex(size_t vertex);
+
+    // if vertex is not in the graph, insert it and return true
+    // otherwise, vertex is already in the graph, return false
+
+To insert a new edge
+
+    bool insert_edge(size_t row,
+                    size_t col,
+                    weight_t value);
+
+    // if vertex row and col are already in the graph and edge row->col is not in the graph, insert it and return true
+    // otherwise, return false
+
+To delete a vertex
+
+    bool delete_vertex(size_t x);
+
+    // if the vertex is in the graph, delete it and all related edges, and return true
+    // otherwise, return false
+
+To delete an edge
+
+    bool delete_edge(size_t row_h,
+                    size_t col_h);
+
+    // if edge is already in the graph, delete it and return true
+    // otherwise, return false
+
+
+### Change the Configuration of Kernel Launch
+    void modify_config(size_t number_of_blocks,
+                        size_t threads_per_block);
+
+If the graph is on host, calling this method will not influence anything.
+
+
+### Get Information of the Graph
+To print the graph 
+
+    void print();
+
+To list the information, like number of edges, of graph 
+
+    void print_config();
+
+To get the number of vertices in the graph
+
+    size_t get_number_of_vertices();
+
+To get the number of edges in the graph
+
+    size_t get_number_of_edges();
+
+To check whether a vertex is in the graph
+
+    bool check_vertex(size_t vertex) ;
+
+    // return true if vertex a is in the graph
+
+To check whether an edge is in the graph
+
+    bool check_edge(size_t row, size_t col);
+
+    // return true if row -> col is in the graph
+
+To get the weight of an edge
+
+    weight_t get_weight(size_t row, size_t col, weight_t not_found);
+
+    // if row -> col is in the graph, return its weight
+    // otherwise, return not_found
+
+To get number of neighbors of a vertex
+
+    size_t get_num_neighbors(size_t x);
+
+    // return 0 if vertex is not in the graph 
+
+To get in-degree of a vertex
+
+    size_t get_in_degree(size_t vertex);
+
+    // return 0 if vertex is not in the graph 
+    
+To get out-degree of a vertex
+
+    size_t get_out_degree(size_t vertex);
+
+    // return 0 if vertex is not in the graph 
+
+To get the list of in-neightbors of a vertex 
+
+    std::vector<size_t> get_source_vertex(size_t vertex);
+
+    // return empty vector if vertex is not in the graph
+
+To get the list of out-neighbors of a vertex 
+
+    std::vector<size_t> get_destination_vertex(size_t vertex);
+
+    // return empty vector if vertex is not in the graph
+
+
+## 4. Evironment Setting
+Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 DAYS!
+
+<img src='some_is_sleeping_on_cuda2.jpg' width='400'>
+<img src='person_sleeping_on_cuda2.png' width='400'>
+
+
+## 5. To Do
 - [x] Finish header file for GPU version
 - [x] Fill the gap 
 - [x] Finish the CPU version
 - [x] Evaluate the correctness
 - [x] Compare performance of GPU and CPU version
-- [ ] Finish README
+- [x] Finish README
 - [ ] Finish final report
 
+## 6. Project Report :ink
+[report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
-## 4. DDL
+
+## 7. DDL
 12.13 to submit report, code and readme.md
 
-## 5. Team Member
+
+## 8. Team Member
  - Shidong Zhang
  - Baijia Ye
  - Ziyue Feng

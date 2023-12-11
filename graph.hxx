@@ -8,16 +8,16 @@ public:
     graph_view_t<weight_t> graph_t;
 
     /* 1 initialize the graph */
-    void init(size_t* v_list_h,
-                size_t v_num_h,
-                size_t* row_idx_h,
-                size_t* col_idx_h,
-                weight_t* value_h,
-                size_t e_num_h,
+    void init(size_t* v_list,
+                size_t v_num,
+                size_t* row_idx,
+                size_t* col_idx,
+                weight_t* value,
+                size_t e_num,
                 size_t number_of_blocks,
                 size_t threads_per_block,
-                size_t MAX_h){
-        graph_t.init(v_list_h ,v_num_h,row_idx_h,col_idx_h,value_h,e_num_h,number_of_blocks,threads_per_block,MAX_h);
+                size_t MAX){
+        graph_t.init(v_list ,v_num,row_idx,col_idx,value,e_num,number_of_blocks,threads_per_block,MAX);
     }
 
     /* 1 print the graph */
@@ -65,18 +65,18 @@ public:
     }
 
     /* 4 Get neighbors */
-    size_t get_num_neighbors(size_t x){
-        return graph_t.get_num_neighbors(x);
+    size_t get_num_neighbors(size_t vertex){
+        return graph_t.get_num_neighbors(vertex);
     }
 
     /* 4 Get in degree */
-    size_t get_in_degree(size_t v){
-        return graph_t.get_in_degree(v);
+    size_t get_in_degree(size_t vertex){
+        return graph_t.get_in_degree(vertex);
     }
 
     /* 4 Get out degree */
-    size_t get_out_degree(size_t v){
-        return graph_t.get_out_degree(v);
+    size_t get_out_degree(size_t vertex){
+        return graph_t.get_out_degree(vertex);
     }
 
     /* 2 insert vertex */
@@ -86,16 +86,16 @@ public:
 
 
     /* 1 if edge is in the graph, return False. Otherwise, return True then inseert*/
-    bool insert_edge(size_t row_h,
-                    size_t col_h,
-                    weight_t value_h){
-        return graph_t.insert_edge(row_h,col_h,value_h);
+    bool insert_edge(size_t row,
+                    size_t col,
+                    weight_t value){
+        return graph_t.insert_edge(row,col,value);
     }
 
     /* 3 Delete edge (row_h,col_h,value_h) */
-    bool delete_edge(size_t row_h,
-                        size_t col_h){
-        return graph_t.delete_edge(row_h,col_h);
+    bool delete_edge(size_t row,
+                        size_t col){
+        return graph_t.delete_edge(row,col);
     }
 
     /* 4 Delete edge (row_h,col_h,value_h) */
@@ -104,12 +104,12 @@ public:
     }
     
     /* 3 return list of destination vertex */
-    std::vector<size_t> get_destination_vertex(size_t x){
-        return graph_t.get_destination_vertex(x);
+    std::vector<size_t> get_destination_vertex(size_t vertex){
+        return graph_t.get_destination_vertex(vertex);
     }
     
     /* 3 return list of source vertex */
-    std::vector<size_t> get_source_vertex(size_t x){
-        return graph_t.get_source_vertex(x);
+    std::vector<size_t> get_source_vertex(size_t vertex){
+        return graph_t.get_source_vertex(vertex);
     }
 };
