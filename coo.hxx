@@ -205,7 +205,7 @@ public:
 
     /* 1 print the graph */
     void print(){
-        bool v_h[MAX_h*8];
+        bool v_h[MAX_h];
         size_t row_idx_h[MAX_h];
         size_t col_idx_h[MAX_h];
         weight_t value_h[MAX_h];
