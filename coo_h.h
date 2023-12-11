@@ -4,30 +4,28 @@
 #include <string.h>
 
 template<typename weight_t> class coo_h{
-    /* whether nodes i exits, v_d[i] == 1 means node i is in the graph*/
-    std::vector<bool> v;
-    /* source of each edge */
-    std::vector<size_t> row_idx;
-    /* target of each edge */
-    std::vector<size_t> col_idx;
-    /* wegith of each edge*/
-    std::vector<weight_t> value;
-    /* number of vertices */
-    size_t v_num;
-    /* number of edges */
-    size_t e_num;
-    /* max number of nodes */
-    size_t MAX;
-    /* deleted slots in the row_idx_d */
-    std::vector<size_t> deleted;
-    /* head of the deleted_d */
-    size_t head;
-    /* tail of the deleted_d */
-    size_t tail;
+    std::vector<bool> v;            // vertex list, v_d[i] == 1 means node i is in the graph
+    std::vector<size_t> row_idx;    // source of each edge 
+    std::vector<size_t> col_idx;    // target of each edge 
+    std::vector<weight_t> value;    // wegith of each edge
+    size_t v_num;   // number of vertices 
+    size_t e_num;   // number of edges 
+    size_t MAX;     // max number of nodes 
+    std::vector<size_t> deleted;    // deleted slots in the row_idx_d 
+    size_t head;    // head of the deleted_d 
+    size_t tail;    // tail of the deleted_d 
 
 public:
     /* 1 Initialize the graph */
-    void init(size_t* v_list ,size_t v_num ,size_t* row_idx ,size_t* col_idx ,weight_t* value ,size_t e_num ,size_t number_of_blocks ,size_t threads_per_block ,size_t MAX){
+    void init(size_t* v_list,
+            size_t v_num,
+            size_t* row_idx,
+            size_t* col_idx,
+            weight_t* value,
+            size_t e_num,
+            size_t number_of_blocks,
+            size_t threads_per_block,
+            size_t MAX){
         this->MAX=MAX;
         this->v_num=v_num;
         this->e_num=e_num;
@@ -51,10 +49,15 @@ public:
         printf("Graph initialzed in CPU\n");
     }
 
+    /* 1 print the graph configuration */
+    void print_config(){
+        printf("v_num=%lu, e_num=%lu, head=%lu, tail=%lu, MAX=%lu\n",v_num,e_num,head,tail,MAX);
+    }
+
     /* 1 print the graph */
     void print(){
         printf("---------------graph begin--------------\n");
-        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu\n",v_num,e_num,head,tail,MAX);
+        print_config();
         printf("v:  ");
         for(size_t i=0;i<MAX;i++){
             if(v[i]) printf("1 ");
@@ -77,11 +80,6 @@ public:
             printf("%lu ",deleted[i%MAX]);
         }
         printf("\n---------------graph end----------------\n");
-    }
-
-    /* 1 print the graph configuration */
-    void print_config(){
-        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu\n",v_num,e_num,head,tail,MAX);
     }
 
     /* 1 modify grid size and block size*/
@@ -109,7 +107,8 @@ public:
     }
 
     /* 2 if edge is in the graph, return True. Otherwise, return False*/
-    bool check_edge(size_t row, size_t col){
+    bool check_edge(size_t row, 
+                    size_t col){
         if(!(v[row]&&v[col])){
             return false;
         }
@@ -122,7 +121,9 @@ public:
     }
 
     /* 2 if edge is in the graph, return the value. Otherwise, return not_found*/
-    weight_t get_weight(size_t row, size_t col, weight_t not_found){
+    weight_t get_weight(size_t row, 
+                        size_t col, 
+                        weight_t not_found){
         if(!(v[row]&&v[col])){
             return not_found;
         }

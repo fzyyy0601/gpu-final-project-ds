@@ -8,7 +8,15 @@ public:
     graph_view_t<weight_t> graph_t;
 
     /* 1 initialize the graph */
-    void init(size_t* v_list_h ,size_t v_num_h ,size_t* row_idx_h ,size_t* col_idx_h ,weight_t* value_h ,size_t e_num_h ,size_t number_of_blocks ,size_t threads_per_block ,size_t MAX_h){
+    void init(size_t* v_list_h,
+                size_t v_num_h,
+                size_t* row_idx_h,
+                size_t* col_idx_h,
+                weight_t* value_h,
+                size_t e_num_h,
+                size_t number_of_blocks,
+                size_t threads_per_block,
+                size_t MAX_h){
         graph_t.init(v_list_h ,v_num_h,row_idx_h,col_idx_h,value_h,e_num_h,number_of_blocks,threads_per_block,MAX_h);
     }
 
@@ -23,7 +31,8 @@ public:
     }
 
     /* 1 modify grid size and block size*/
-    void modify_config(size_t number_of_blocks,size_t threads_per_block){
+    void modify_config(size_t number_of_blocks,
+                        size_t threads_per_block){
         graph_t.modify_config(number_of_blocks,threads_per_block);
     }
 
@@ -43,12 +52,15 @@ public:
     }
 
     /* 2 if edge is in the graph, return True. Otherwise, return False */
-    bool check_edge(size_t row, size_t col){
+    bool check_edge(size_t row, 
+                    size_t col){
         return graph_t.check_edge(row, col);
     }
 
     /* 2 if edge is in the graph, return value. Otherwise, return not_found */
-    weight_t get_weight(size_t row, size_t col, weight_t not_found){
+    weight_t get_weight(size_t row, 
+                        size_t col, 
+                        weight_t not_found){
         return graph_t.get_weight(row, col, not_found);
     }
 
@@ -81,7 +93,8 @@ public:
     }
 
     /* 3 Delete edge (row_h,col_h,value_h) */
-    bool delete_edge(size_t row_h,size_t col_h){
+    bool delete_edge(size_t row_h,
+                        size_t col_h){
         return graph_t.delete_edge(row_h,col_h);
     }
 

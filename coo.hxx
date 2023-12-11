@@ -170,18 +170,18 @@ void coo_delete_vertex_d(size_t* row_idx_d,
 
 /* our class to store the graph with coo */
 template<typename weight_t> class coo{
-    bool *v_d;          // vertex list, v_d[i] == 1 means node i is in the graph*/
-    size_t *row_idx_d;  // source of each edge */
-    size_t *col_idx_d;  // target of each edge */
-    weight_t *value_d;  // wegith of each edge*/
-    size_t v_num_h;     // number of vertices */
-    size_t e_num_h;     // number of edges */
-    size_t MAX_h;       // max number of nodes */
-    size_t *deleted_d;  // deleted slots in the row_idx_d */
-    size_t head_h;      // head of the deleted_d */
-    size_t tail_h;      // tail of the deleted_d */
-    size_t number_of_blocks;    // number of blocks */
-    size_t threads_per_block;   // number of threads per block */
+    bool *v_d;          // vertex list, v_d[i] == 1 means node i is in the graph
+    size_t *row_idx_d;  // source of each edge 
+    size_t *col_idx_d;  // target of each edge 
+    weight_t *value_d;  // wegith of each edge
+    size_t v_num_h;     // number of vertices 
+    size_t e_num_h;     // number of edges 
+    size_t MAX_h;       // max number of nodes 
+    size_t *deleted_d;  // deleted slots in the row_idx_d 
+    size_t head_h;      // head of the deleted_d 
+    size_t tail_h;      // tail of the deleted_d 
+    size_t number_of_blocks;    // number of blocks 
+    size_t threads_per_block;   // number of threads per block 
 
 public:
     /* 1 Initialize the graph */
@@ -225,6 +225,12 @@ public:
         printf("Graph initialzed in GPU, grid size: %d, block size: %d\n", number_of_blocks, threads_per_block);
     }
 
+    /* 1 print the graph configuration */
+    void print_config(){
+        printf("v_num=%lu, e_num=%lu, head=%lu, tail=%lu, MAX=%lu, gridsize=%lu, blocksize=%lu\n",
+                v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
+    }
+
     /* 1 print the graph */
     void print(){
         bool v_h[MAX_h];
@@ -238,7 +244,7 @@ public:
         cudaMemcpy(value_h,value_d,MAX_h*sizeof(weight_t),cudaMemcpyDeviceToHost);
         cudaMemcpy(deleted_h,deleted_d,MAX_h*sizeof(size_t),cudaMemcpyDeviceToHost);
         printf("---------------graph begin--------------\n");
-        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu ,gridsize=%lu, blocksize=%lu\n",v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
+        print_config();
         printf("v_d:  ");
         for(int i=0;i<MAX_h;i++){
             if(v_h[i]) printf("1 ");
@@ -261,11 +267,6 @@ public:
             printf("%lu ",deleted_h[i%MAX_h]);
         }
         printf("\n---------------graph end----------------\n");
-    }
-
-    /* 1 print the graph configuration */
-    void print_config(){
-        printf("v_num=%lu ,e_num=%lu ,head=%lu, tail=%lu ,MAX=%lu ,gridsize=%lu, blocksize=%lu\n",v_num_h,e_num_h,head_h,tail_h,MAX_h,number_of_blocks,threads_per_block);
     }
 
     ~coo(){
