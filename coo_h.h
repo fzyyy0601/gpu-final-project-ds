@@ -221,7 +221,7 @@ public:
         return false;
     }
 
-    /* 4 Delete edge (row,col,value) */
+    /* 4 Delete vertex x */
     bool delete_vertex(size_t x){
         if(!v[x]){
             return false;
