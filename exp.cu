@@ -11,7 +11,7 @@
 /* intital graph configuration */
 const size_t MAX_V = 20000; // max number of vertices
 const size_t MAX = 2000000; // max number of edges
-size_t test_times = 1000;   // test times
+size_t test_times = 100000;   // test times
 size_t v_num = 10000;       // initial number of vertices
 size_t e_num = 1000000;     // intinal number of edges, e_num should smaller than MAX+test_times
 size_t v_list[MAX_V];       // intinal vertex list
@@ -88,7 +88,7 @@ int main(){
     init();
 
     /* create an empty graph*/
-    graph<int,coo_d> g;
+    graph<int,coo_h> g;
 
     // /* print the initial graph we input */
     // printf("The initial graph we input: \n");
