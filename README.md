@@ -1,4 +1,4 @@
-# gpu-final-project-ds 
+# gpu-final-project-datastructure
 
 # Project #8: Data Structure Library for GPUs: Graphs
 
@@ -189,8 +189,8 @@ Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
 
-## 7. DDL
-12.13 to submit report, code and readme.md
+## 7. Deadline: 12.13
+report, source code and readme.txt
 
 
 ## 8. Team Member
