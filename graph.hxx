@@ -98,7 +98,7 @@ public:
         return graph_t.delete_edge(row,col);
     }
 
-    /* 4 Delete edge (row_h,col_h,value_h) */
+    /* 4 Delete vertex (v_del) */
     bool delete_vertex(size_t v_del){
         return graph_t.delete_vertex(v_del);
     }
