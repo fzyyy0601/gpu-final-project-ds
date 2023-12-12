@@ -1,4 +1,4 @@
-# gpu-final-project-datastructure
+# gpu-final-project
 
 # Project #8: Data Structure Library for GPUs: Graphs
 
