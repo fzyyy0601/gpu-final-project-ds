@@ -448,7 +448,7 @@ public:
         return res_h;
     }
 
-    /* 4 Delete vertex (row_h,col_h,value_h) */
+    /* 4 Delete vertex (x) */
     bool delete_vertex(size_t x){
         if (!(check_vertex(x))){
             return false;
