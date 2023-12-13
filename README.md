@@ -230,7 +230,7 @@ Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the
 - [x] Finish README
 - [ ] Finish final report
 
-## 6. Project Report :ink
+## 6. Project Report link
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
 
 
