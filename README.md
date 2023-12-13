@@ -182,13 +182,37 @@ The output should be shown as below which is the configuration you should input 
     GPU(0)\CPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size
 
 - GPU(0)\CPU(1) - To run it on GPU should input 0, on CPU should input 1
-- MAX_V - The maximum number of vertices in the graph
+- MAX_V - The maximum vertex index in the graph (no vertex can larger than MAX_V)
 - v_num - The number of vertices for initial graph
 - e_num - The number of edges for initial graph
 - test_times - The number of testing each funcitons
 - MAX - The memory limit for graph
 - grid_size - grid size when choosing GPU
 - block_size - block size when choosing GPU
+
+For example if you want to run a GPU graph on a initialized 10000 vertices 1000000 edges and want test the functions 1000 times, the maximum number of vertices is 20000 and memory limit is 2000000 with grid size 80 and block size 256. You should input
+
+    0 20000 10000 1000000 1000 2000000 80 256
+
+The sample result should be like
+
+    ----------------------------Test begin------------------------------------
+    Graph initialzed in GPU, grid size: 80, block size: 256
+    initialization: 0.40 s
+    insert 1000 vertices: 0.01 s
+    insert 1000 edges: 0.03 s
+    check 1000 edges: 0.02 s
+    check 1000 vertices: 0.01 s
+    get weight of 1000 edges: 0.03 s
+    get in degree of 1000 vertices: 0.04 s
+    get out degree of 1000 vertices: 0.05 s
+    get num of neighbors of 1000 vertices: 0.10 s
+    get source of 1000 vertices: 0.09 s
+    get destination of 1000 vertices: 0.10 s
+    delete 1000 edges: 0.02 s
+    delete 1000 vertices: 0.04 s
+    Total time: 0.94 s
+    ----------------------------Test end---------------------------------------
 
 
 Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 DAYS!
