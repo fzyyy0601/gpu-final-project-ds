@@ -9,12 +9,12 @@
 #include <algorithm>
 
 /* intital graph configuration */
-const size_t MAX_V = 20000; // max number of vertices
-const size_t MAX = 2000000; // max number of edges
+size_t MAX_V = 20000; // max number of vertices
+const size_t MAX = 10000000; // max number of edges
 size_t test_times = 100000;   // test times
 size_t v_num = 10000;       // initial number of vertices
 size_t e_num = 1000000;     // intinal number of edges, e_num should smaller than MAX+test_times
-size_t v_list[MAX_V];       // intinal vertex list
+size_t v_list[MAX];       // intinal vertex list
 size_t row_idx[MAX] = {};   // initial row index (source of each edge)
 size_t col_idx[MAX] = {};   // initial col index (target of each edge)
 int value[MAX] = {};        // initial weight for each edge
@@ -77,44 +77,16 @@ void init(){
     }
 }
 
-int main(){
-    /* set the random seed and clock */
-    srand(0);
+template<typename weight_t,
+template<typename> typename graph_view_t> 
+void test(graph<weight_t,graph_view_t> g){
+
     double time_taken;
     clock_t start, end;
     clock_t T_start, T_end;
 
     /* create an initial graph in host */
     init();
-
-    /* create an empty graph*/
-    graph<int,coo_h> g;
-
-    // /* print the initial graph we input */
-    // printf("The initial graph we input: \n");
-    // printf("v_list: ");
-    // for(int i = 0; i < v_num; i++){
-    //     printf("%lu ", v_list[i]);
-    // }
-    // printf("\n");
-    
-    // printf("row_idx: ");
-    // for(int i = 0; i < e_num; i++){
-    //     printf("%lu ", row_idx[i]);
-    // }
-    // printf("\n");
-    
-    // printf("col_idx: ");
-    // for(int i = 0; i < e_num; i++){
-    //     printf("%lu ", col_idx[i]);
-    // }
-    // printf("\n");
-    
-    // printf("value: ");
-    // for(int i = 0; i < e_num; i++){
-    //     printf("%d ", value[i]);
-    // }
-    // printf("\n");
 
     printf("\n ----------------------------Test begin------------------------------------\n");
 
@@ -247,6 +219,51 @@ int main(){
 
 
     printf("----------------------------Test end---------------------------------------\n");
+
+}
+
+int main(){
+    /* set the random seed and clock */
+    printf("MAX_V | v_num | e_num | test_times | GPU(0)\\GPU(1) | grid_size | block_size\n");
+    int CGPU;
+    scanf("%lu%lu%lu%lu%d%lu%lu",&MAX_V,&v_num,&e_num,&test_times,&CGPU,&number_of_blocks,&threads_per_block);
+    srand(0);
+
+    /* create an empty graph*/
+    if(CGPU==0){
+        graph<int,coo_d> g;
+        test(g);
+    }
+    else{
+        graph<int,coo_h> g;
+        test(g);
+    }
+
+    // /* print the initial graph we input */
+    // printf("The initial graph we input: \n");
+    // printf("v_list: ");
+    // for(int i = 0; i < v_num; i++){
+    //     printf("%lu ", v_list[i]);
+    // }
+    // printf("\n");
+    
+    // printf("row_idx: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%lu ", row_idx[i]);
+    // }
+    // printf("\n");
+    
+    // printf("col_idx: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%lu ", col_idx[i]);
+    // }
+    // printf("\n");
+    
+    // printf("value: ");
+    // for(int i = 0; i < e_num; i++){
+    //     printf("%d ", value[i]);
+    // }
+    // printf("\n");
 
     return 0;
 }
