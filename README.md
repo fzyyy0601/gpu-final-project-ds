@@ -228,7 +228,7 @@ Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the
 - [x] Evaluate the correctness
 - [x] Compare performance of GPU and CPU version
 - [x] Finish README
-- [ ] Finish final report
+- [x] Finish final report
 
 ## 6. Project Report link
 [report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
