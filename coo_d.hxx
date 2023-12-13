@@ -209,7 +209,7 @@ public:
         cudaMemcpy(v_list_d,v_list_h,v_num_h*sizeof(size_t),cudaMemcpyHostToDevice);
         coo_init_v_d<<<number_of_blocks,threads_per_block>>>(v_d,v_list_d,v_num_h);
         cudaDeviceSynchronize();
-                cudaFree(v_list_d);
+        cudaFree(v_list_d);
 
         cudaMalloc((void **)&row_idx_d,MAX_h*sizeof(size_t));
         cudaMemcpy(row_idx_d,row_idx_h,e_num_h*sizeof(size_t),cudaMemcpyHostToDevice);

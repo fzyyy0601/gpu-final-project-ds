@@ -230,7 +230,7 @@ int main(){
     /* type in the configuration of the experiment*/
     printf("GPU(0)\\CPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size\n");
     int CGPU;
-    scanf("%d%lu%lu%lu%lu%lu%lu%lu",&CGPU,&MAX_V,&v_num,&e_num,&test_times,&MAX,&number_of_blocks,&threads_per_block);
+    scanf("%d%lu%lu%lu%lu%lu",&CGPU,&MAX_V,&v_num,&e_num,&test_times,&MAX);
     
     v_list=(size_t*)malloc(v_num*sizeof(size_t));
     row_idx=(size_t*)malloc(e_num*sizeof(size_t));
@@ -239,6 +239,7 @@ int main(){
 
     /* create an empty graph*/
     if(CGPU==0){
+        scanf("%lu%lu",&number_of_blocks,&threads_per_block);
         graph<int,coo_d> g;
         test(g);
     }
