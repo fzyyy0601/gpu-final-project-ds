@@ -227,11 +227,11 @@ The sample result should be like
     Total time: 0.94 s
     ----------------------------Test end---------------------------------------
 
-
 Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims 
 server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because 
 someone have occupied the memory of the GPU on cuda2 and not used the computation resources 
 for more than 4 DAYS!
+
 
 ## 5. Team Member
  - Shidong Zhang
