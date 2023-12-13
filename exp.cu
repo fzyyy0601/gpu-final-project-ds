@@ -21,8 +21,8 @@ size_t col_idx[N] = {};   // initial col index (target of each edge)
 int value[N] = {};        // initial weight for each edge
 
 /* configuration for the kernel call */
-size_t number_of_blocks = 160;
-size_t threads_per_block = 1024;
+size_t number_of_blocks;
+size_t threads_per_block;
 
 /* randomly create an intial graph in the host according to 
     number of vertices, edges and max number of vertices */
@@ -228,7 +228,7 @@ int main(){
     srand(0);
 
     /* type in the configuration of the experiment*/
-    printf("CPU(0)\\GPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size\n");
+    printf("GPU(0)\\CPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size\n");
     int CGPU;
     scanf("%d%lu%lu%lu%lu%lu%lu%lu",&CGPU,&MAX_V,&v_num,&e_num,&test_times,&MAX,&number_of_blocks,&threads_per_block);
     
