@@ -9,15 +9,16 @@
 #include <algorithm>
 
 /* intital graph configuration */
-size_t MAX_V = 20000; // max number of vertices
-const size_t MAX = 10000000; // max number of edges
-size_t test_times = 100000;   // test times
-size_t v_num = 10000;       // initial number of vertices
-size_t e_num = 1000000;     // intinal number of edges, e_num should smaller than MAX+test_times
-size_t v_list[MAX];       // intinal vertex list
-size_t row_idx[MAX] = {};   // initial row index (source of each edge)
-size_t col_idx[MAX] = {};   // initial col index (target of each edge)
-int value[MAX] = {};        // initial weight for each edge
+size_t MAX_V; // max number of vertices
+const size_t N = 10000000;
+size_t MAX; // max number of nodes / memory limit
+size_t test_times;   // test times
+size_t v_num;       // initial number of vertices
+size_t e_num;     // intinal number of edges, e_num should smaller than MAX+test_times
+size_t v_list[N];       // intinal vertex list
+size_t row_idx[N] = {};   // initial row index (source of each edge)
+size_t col_idx[N] = {};   // initial col index (target of each edge)
+int value[N] = {};        // initial weight for each edge
 
 /* configuration for the kernel call */
 size_t number_of_blocks = 160;
@@ -227,9 +228,9 @@ int main(){
     srand(0);
 
     /* type in the configuration of the experiment*/
-    printf("MAX_V | v_num | e_num | test_times | GPU(0)\\GPU(1) | grid_size | block_size\n");
+    printf("CPU(0)\\GPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size\n");
     int CGPU;
-    scanf("%lu%lu%lu%lu%d%lu%lu",&MAX_V,&v_num,&e_num,&test_times,&CGPU,&number_of_blocks,&threads_per_block);
+    scanf("%d%lu%lu%lu%lu%lu%lu%lu",&CGPU,&MAX_V,&v_num,&e_num,&test_times,&MAX,&number_of_blocks,&threads_per_block);
     
 
     /* create an empty graph*/

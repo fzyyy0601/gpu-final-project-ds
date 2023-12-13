@@ -45,7 +45,7 @@ To initialize a graph
               size_t e_num,           // number of edges
               size_t number_of_blocks,  // girdsize for kernel launch
               size_t threads_per_block, // blocksize for kernel launch
-              size_t MAX);             // max number of vertices 
+              size_t MAX);             // max memory limit
 
 If you put the graph in the host, the number_of_blocks and threads_per_block can be any number and not influence the result.
 

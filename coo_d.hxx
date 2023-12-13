@@ -176,7 +176,7 @@ template<typename weight_t> class coo_d{
     weight_t *value_d;  // wegith of each edge
     size_t v_num_h;     // number of vertices 
     size_t e_num_h;     // number of edges 
-    size_t MAX_h;       // max number of nodes 
+    size_t MAX_h;       // max number of nodes / memory limit
     size_t *deleted_d;  // deleted slots in the row_idx_d 
     size_t head_h;      // head of the deleted_d 
     size_t tail_h;      // tail of the deleted_d 

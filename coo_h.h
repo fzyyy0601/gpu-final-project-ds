@@ -10,7 +10,7 @@ template<typename weight_t> class coo_h{
     std::vector<weight_t> value;    // wegith of each edge
     size_t v_num;   // number of vertices 
     size_t e_num;   // number of edges 
-    size_t MAX;     // max number of nodes 
+    size_t MAX;     // max number of nodes | memory limit
     std::vector<size_t> deleted;    // deleted slots in the row_idx_d 
     size_t head;    // head of the deleted_d 
     size_t tail;    // tail of the deleted_d 
