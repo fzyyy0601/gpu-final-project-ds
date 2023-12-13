@@ -235,7 +235,7 @@ int main(){
     v_list=(size_t*)malloc(v_num*sizeof(size_t));
     row_idx=(size_t*)malloc(e_num*sizeof(size_t));
     col_idx=(size_t*)malloc(e_num*sizeof(size_t));
-    value=(size_t*)malloc(e_num*sizeof(int));
+    value=(int*)malloc(e_num*sizeof(int));
 
     /* create an empty graph*/
     if(CGPU==0){
