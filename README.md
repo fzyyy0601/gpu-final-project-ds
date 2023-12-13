@@ -230,12 +230,11 @@ Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the
 - [x] Finish README
 - [x] Finish final report
 
-## 6. Project Report link
-[report link](https://www.overleaf.com/5446618226vkrkpmmqqckf#965552)
-
+## 6. Project Report
+[final report](https://github.com/fzyyy0601/gpu-final-project-ds/blob/main/Project8_GPU_Final_Report.pdf)
 
 ## 7. Deadline: 12.13
-report, source code and readme.txt
+one report, source code and readme.txt
 
 
 ## 8. Team Member
