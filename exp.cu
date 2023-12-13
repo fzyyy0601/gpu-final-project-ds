@@ -15,10 +15,10 @@ size_t MAX; // max number of nodes / memory limit
 size_t test_times;   // test times
 size_t v_num;       // initial number of vertices
 size_t e_num;     // intinal number of edges, e_num should smaller than MAX+test_times
-size_t v_list[N];       // intinal vertex list
-size_t row_idx[N] = {};   // initial row index (source of each edge)
-size_t col_idx[N] = {};   // initial col index (target of each edge)
-int value[N] = {};        // initial weight for each edge
+size_t* v_list;       // intinal vertex list
+size_t* row_idx;   // initial row index (source of each edge)
+size_t* col_idx;   // initial col index (target of each edge)
+int* value;        // initial weight for each edge
 
 /* configuration for the kernel call */
 size_t number_of_blocks;
@@ -232,6 +232,10 @@ int main(){
     int CGPU;
     scanf("%d%lu%lu%lu%lu%lu%lu%lu",&CGPU,&MAX_V,&v_num,&e_num,&test_times,&MAX,&number_of_blocks,&threads_per_block);
     
+    v_list=(size_t*)malloc(v_num*sizeof(size_t));
+    row_idx=(size_t*)malloc(e_num*sizeof(size_t));
+    col_idx=(size_t*)malloc(e_num*sizeof(size_t));
+    value=(size_t*)malloc(e_num*sizeof(int));
 
     /* create an empty graph*/
     if(CGPU==0){
@@ -242,6 +246,11 @@ int main(){
         graph<int,coo_h> g;
         test(g);
     }
+
+    free(v_list);
+    free(row_idx);
+    free(col_idx);
+    free(value);
 
     // /* print the initial graph we input */
     // printf("The initial graph we input: \n");
