@@ -12,6 +12,7 @@ host and do all the operations sequentially on the host, while the GPU version s
 coordinate list on the device and accerlate operations through parallelization. Through 
 testing, we find that, when the graph is big, the GPU version runs much faster for 
 operations that have to traverse the whole coordinate list.
+Link to project GitHub page: https://github.com/fzyyy0601/gpu-final-project-ds
 
 ## 2. Files Description
  - README.md - give an introduction to this repository
