@@ -170,6 +170,27 @@ To get the list of out-neighbors of a vertex
 
 
 ## 4. Evironment Setting
+
+###Demo code (exp.cu)
+
+Compile and run the code
+
+    nvcc -o exp exp.cu && ./exp // run the cuda code
+
+The output should be shown as below which is the configuration you should input respectively
+
+    GPU(0)\CPU(1) | MAX_V | v_num | e_num | test_times | MAX | grid_size | block_size
+
+- GPU(0)\CPU(1) - To run it on GPU should input 0, on CPU should input 1
+- MAX_V - The maximum number of vertices in the graph
+- v_num - The number of vertices for initial graph
+- e_num - The number of edges for initial graph
+- test_times - The number of testing each funcitons
+- MAX - The memory limit for graph
+- grid_size - grid size when choosing GPU
+- block_size - block size when choosing GPU
+
+
 Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 DAYS!
 
 <img src='some_is_sleeping_on_cuda2.jpg' width='600'>
