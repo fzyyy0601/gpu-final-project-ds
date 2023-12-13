@@ -13,7 +13,7 @@ This project creates a data structure using CUDA with C++ to store a graph. The 
  - test.cu - cuda code to test whether the GPU version runs correctly on a very small graph
  - compare.cu - cuda code to check whether the GPU version and the CPU give the same result for same operations
  - exp.cu - cuda code to run the data structure and measure the time
- - some_is_sleeping_on_cuda2.jpg - someone has occupied the memory of the GPU on server cuda2 and not used the computation resources for more than 2 days. As a result, we can not use the cuda2 to test our data structure
+ - some_is_sleeping_on_cuda2.jpg - someone has occupied the memory of the GPU on server cuda2 and not used the computation resources for more than 4 days. As a result, we can not use the cuda2 to test our data structure
  - person_sleeping_on_cuda2.png - the name of the process that occupies cuda2 and does nothing
  
 
@@ -215,7 +215,7 @@ The sample result should be like
     ----------------------------Test end---------------------------------------
 
 
-Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 2 DAYS!
+Our code could be compiled with cuda-11.4 and gcc-4.8.5 and run correctly on the NYU cims server - cuda1, cuda3, cuda4, and cuda5. HOWEVER, could not test our code on cuda2 because someone have occupied the memory of the GPU on cuda2 and not used the computation resources for more than 4 DAYS!
 
 <img src='some_is_sleeping_on_cuda2.jpg' width='600'>
 <img src='person_sleeping_on_cuda2.png' width='600'>
