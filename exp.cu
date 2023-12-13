@@ -224,10 +224,13 @@ void test(graph<weight_t,graph_view_t> g){
 
 int main(){
     /* set the random seed and clock */
+    srand(0);
+
+    /* type in the configuration of the experiment*/
     printf("MAX_V | v_num | e_num | test_times | GPU(0)\\GPU(1) | grid_size | block_size\n");
     int CGPU;
     scanf("%lu%lu%lu%lu%d%lu%lu",&MAX_V,&v_num,&e_num,&test_times,&CGPU,&number_of_blocks,&threads_per_block);
-    srand(0);
+    
 
     /* create an empty graph*/
     if(CGPU==0){
