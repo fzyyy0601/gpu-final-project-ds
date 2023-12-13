@@ -2,6 +2,7 @@
 
 # Project #8: Data Structure Library for GPUs: Graphs
 
+
 ## 1. Introduction
 This project creates a data structure using CUDA with C++ to store a graph. The graph can 
 be directed and is able to record weight for each edge. We provide two version of the data 
@@ -13,6 +14,7 @@ coordinate list on the device and accerlate operations through parallelization. 
 testing, we find that, when the graph is big, the GPU version runs much faster for 
 operations that have to traverse the whole coordinate list.
 Link to project GitHub page: https://github.com/fzyyy0601/gpu-final-project-ds
+
 
 ## 2. Files Description
  - README.md - give an introduction to this repository
@@ -183,7 +185,7 @@ To get the list of out-neighbors of a vertex
 
 ## 4. Evironment Setting
 
-###Demo code (exp.cu)
+### Demo code (exp.cu)
 
 Compile and run the code
 
